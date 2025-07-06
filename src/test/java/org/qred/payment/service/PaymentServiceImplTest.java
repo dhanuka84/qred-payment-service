@@ -46,6 +46,8 @@ public class PaymentServiceImplTest {
 
     @BeforeEach
     void setUp() {
+    	paymentMapper.setContractRepository(contractRepository);
+    	
         contract = new Contract(1L, new Client(1L, "Acme"), "12345");
         payment = new Payment(1L, LocalDate.of(2024, 1, 30), 1000.0, "incoming", contract);
         paymentDTO = new PaymentDTO("2024-01-30", 1000.0, "incoming", "12345");

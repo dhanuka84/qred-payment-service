@@ -2,6 +2,7 @@ package org.qred.payment.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -28,15 +29,17 @@ public class ContractServiceImplTest {
 
     @Mock
     private ContractRepository contractRepository;
-
+    
     @Mock
     private ClientRepository clientRepository;
 
-    @Spy
-    private ContractMapper contractMapper = Mappers.getMapper(ContractMapper.class);
+    
 
     @InjectMocks
     private ContractServiceImpl contractService;
+    
+    @Spy
+    private ContractMapper contractMapper =  Mappers.getMapper( ContractMapper.class );
 
     private Contract contract;
     private ContractDTO contractDTO;
@@ -44,6 +47,10 @@ public class ContractServiceImplTest {
 
     @BeforeEach
     void setUp() {
+    
+    	contractMapper.setClientRepository(clientRepository);
+    	
+    	 
         client = new Client(1L, "Acme");
         contract = new Contract(1L, client, "12345");
         contractDTO = new ContractDTO(1L, 1L, "12345");
@@ -67,7 +74,7 @@ public class ContractServiceImplTest {
     @Test
     void shouldSaveContract() {
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
-        when(contractRepository.save(any())).thenReturn(contract);
+        lenient().when(contractRepository.save(any())).thenReturn(contract);
         ContractDTO result = contractService.save(contractDTO);
         assertEquals("12345", result.contractNumber());
     }
@@ -76,8 +83,8 @@ public class ContractServiceImplTest {
     void shouldUpdateContract() {
         when(contractRepository.findById(1L)).thenReturn(Optional.of(contract));
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
-        when(contractRepository.save(any())).thenReturn(contract);
+        lenient().when(contractRepository.save(any())).thenReturn(contract);
         ContractDTO result = contractService.update(1L, contractDTO);
         assertEquals("12345", result.contractNumber());
     }
-} 
+}

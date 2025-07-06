@@ -48,4 +48,8 @@ public abstract class PaymentMapper {
         return contractRepository.findByContractNumber(contractNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found: " + contractNumber));
     }
+    
+    public void setContractRepository(ContractRepository contractRepository) {
+    	this.contractRepository = contractRepository;
+    }
 }

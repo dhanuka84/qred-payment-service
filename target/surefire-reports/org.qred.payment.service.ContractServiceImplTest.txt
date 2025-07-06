@@ -1,28 +1,14 @@
 -------------------------------------------------------------------------------
 Test set: org.qred.payment.service.ContractServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.123 s <<< FAILURE! -- in org.qred.payment.service.ContractServiceImplTest
-org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract -- Time elapsed: 0.106 s <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.121 s <<< FAILURE! -- in org.qred.payment.service.ContractServiceImplTest
+org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract -- Time elapsed: 0.104 s <<< ERROR!
 org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
 
 Unnecessary stubbings detected.
 Clean & maintainable test code requires zero unnecessary code.
 Following stubbings are unnecessary (click to navigate to relevant line of code):
-  1. -> at org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract(ContractServiceImplTest.java:78)
-Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
-	at org.mockito.junit.jupiter.MockitoExtension.lambda$afterEach$2(MockitoExtension.java:200)
-	at java.base/java.util.Optional.ifPresent(Optional.java:178)
-	at org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:198)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-
-org.qred.payment.service.ContractServiceImplTest.shouldSaveContract -- Time elapsed: 0.003 s <<< ERROR!
-org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
-
-Unnecessary stubbings detected.
-Clean & maintainable test code requires zero unnecessary code.
-Following stubbings are unnecessary (click to navigate to relevant line of code):
-  1. -> at org.qred.payment.service.ContractServiceImplTest.shouldSaveContract(ContractServiceImplTest.java:69)
+  1. -> at org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract(ContractServiceImplTest.java:85)
 Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
 	at org.mockito.junit.jupiter.MockitoExtension.lambda$afterEach$2(MockitoExtension.java:200)
 	at java.base/java.util.Optional.ifPresent(Optional.java:178)

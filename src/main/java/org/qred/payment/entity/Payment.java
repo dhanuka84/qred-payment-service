@@ -15,13 +15,12 @@ import java.time.LocalDate;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymentId;
     
     @Version
-    @Column(nullable = false)
+    @Column(name = "version", nullable = false)
     private Integer version;
     
-    private Long paymentId;
-
     private LocalDate paymentDate;
     private double amount;
     private String type;
@@ -49,4 +48,12 @@ public class Payment {
     public void setType(String type) { this.type = type; }
     public Contract getContract() { return contract; }
     public void setContract(Contract contract) { this.contract = contract; }
+    
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 }

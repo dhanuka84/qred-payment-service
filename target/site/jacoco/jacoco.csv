@@ -7,7 +7,7 @@ payment-service,org.qred.payment.service.impl,ClientServiceImpl,0,68,0,0,0,10,0,
 payment-service,org.qred.payment.service.impl,PaymentServiceImpl,7,100,0,0,0,18,1,6,1,6
 payment-service,org.qred.payment.service.impl,ContractServiceImpl,5,68,0,0,1,10,1,5,1,5
 payment-service,org.qred.payment.entity,Contract,0,36,0,0,0,12,0,8,0,8
-payment-service,org.qred.payment.entity,Payment,7,49,0,0,2,16,2,10,2,10
+payment-service,org.qred.payment.entity,Payment,14,49,0,0,5,16,4,10,4,10
 payment-service,org.qred.payment.entity,Client,0,26,0,0,0,9,0,6,0,6
 payment-service,org.qred.payment.exception,Http400BadRequest,26,0,2,0,10,0,5,0,4,0
 payment-service,org.qred.payment.exception,Http404NotFoundException,9,0,0,0,4,0,2,0,2,0

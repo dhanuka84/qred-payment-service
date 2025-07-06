@@ -1,14 +1,16 @@
-Payment
 
-payment_id, payment_date, amount, type, contract_id
 
-Contract
+#Assumptions
+1. Payment data batch processing file has only relevant data when importing. No data related to client.
 
-contract_id, client_id, contract_number
+#ER Diagram
+db-schema.html
 
-Client
-
-client_id, client_name
+#Local Swagger-ui html
+Swagger-UI.html
 
 #swagger-ui
 http://localhost:8080/swagger-ui/index.html#/
+
+#Spring Boot Operations
+$ mvn spring-boot:run

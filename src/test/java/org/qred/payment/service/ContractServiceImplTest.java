@@ -3,6 +3,7 @@ package org.qred.payment.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import org.qred.payment.mapper.ContractMapper;
 import org.qred.payment.repository.ClientRepository;
 import org.qred.payment.repository.ContractRepository;
 import org.qred.payment.service.impl.ContractServiceImpl;
+import org.qred.payment.service.impl.PaymentServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractServiceImplTest {
@@ -50,6 +52,7 @@ public class ContractServiceImplTest {
     
     	contractMapper.setClientRepository(clientRepository);
     	
+    	contractService = spy( new ContractServiceImpl( contractRepository, contractMapper ) );
     	 
         client = new Client(1L, "Acme");
         contract = new Contract(1L, client, "12345");
@@ -82,8 +85,8 @@ public class ContractServiceImplTest {
     @Test
     void shouldUpdateContract() {
         when(contractRepository.findById(1L)).thenReturn(Optional.of(contract));
-        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
-        lenient().when(contractRepository.save(any())).thenReturn(contract);
+        
+        when(contractRepository.save(any())).thenReturn(contract);
         ContractDTO result = contractService.update(1L, contractDTO);
         assertEquals("12345", result.contractNumber());
     }

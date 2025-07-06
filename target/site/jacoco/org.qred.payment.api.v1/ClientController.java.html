@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payment-service</a> &gt; <a href="index.source.html" class="el_package">org.qred.payment.api.v1</a> &gt; <span class="el_source">ClientController.java</span></div><h1>ClientController.java</h1><pre class="source lang-java linenums">package org.qred.payment.api.v1;
+
+import java.util.List;
+
+import org.qred.payment.domain.ClientDTO;
+import org.qred.payment.service.ClientService;
+import org.qred.payment.validator.RestValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+/**
+ * @author : Dhanuka Ranasinghe
+ * @since : Date: 05/07/2025
+ */
+@RestController
+@RequestMapping(&quot;/api/v1/clients&quot;)
+public class ClientController {
+
+    private final ClientService clientService;
+    private final RestValidator validator;
+
+<span class="fc" id="L27">    public ClientController(ClientService clientService, RestValidator validator) {</span>
+<span class="fc" id="L28">        this.clientService = clientService;</span>
+<span class="fc" id="L29">        this.validator = validator;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Operation(summary = &quot;Get all clients.&quot;, description = &quot;Fetch all client records.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful retrieval.&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
+    })
+    @GetMapping
+    public ResponseEntity&lt;List&lt;ClientDTO&gt;&gt; getAllClients() {
+<span class="fc" id="L39">        List&lt;ClientDTO&gt; clients = clientService.findAll();</span>
+<span class="fc" id="L40">        return ResponseEntity.ok(clients);</span>
+    }
+
+    @Operation(summary = &quot;Get a client by ID.&quot;, description = &quot;Fetch a single client by ID.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful retrieval.&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Client not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
+    })
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ClientDTO&gt; getClientById(@PathVariable Long id) {
+<span class="fc" id="L51">        ClientDTO client = clientService.findById(id);</span>
+<span class="fc" id="L52">        return ResponseEntity.ok(client);</span>
+    }
+
+    @Operation(summary = &quot;Create client entity.&quot;, description = &quot;Create client entity.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Successfully created.&quot;),
+        @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Bad Request.&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
+    })
+    @PostMapping
+    public ResponseEntity&lt;ClientDTO&gt; createClient(@RequestBody ClientDTO client) {
+<span class="fc" id="L63">        validator.validateClientNameRequest(client.clientName());</span>
+<span class="fc" id="L64">        ClientDTO savedClient = clientService.save(client);</span>
+<span class="fc" id="L65">        return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);</span>
+    }
+
+    @Operation(summary = &quot;Update a client.&quot;, description = &quot;Update an existing client.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successfully updated.&quot;),
+        @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Bad Request.&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Client not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
+    })
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ClientDTO&gt; updateClient(@PathVariable Long id, @RequestBody ClientDTO client) {
+<span class="fc" id="L77">        validator.validateClientNameRequest(client.clientName());</span>
+<span class="fc" id="L78">        ClientDTO updatedClient = clientService.update(id, client);</span>
+<span class="fc" id="L79">        return ResponseEntity.ok(updatedClient);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

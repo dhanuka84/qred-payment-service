@@ -86,6 +86,7 @@ public class PaymentServiceImplTest {
     @Test
     void shouldUpdatePayment() {
         when(paymentRepository.findById(1L)).thenReturn(Optional.of(payment));
+        when(contractService.findByContractNumber("12345")).thenReturn(Optional.of(contract));
         when(paymentRepository.save(any())).thenReturn(payment);
         PaymentDTO result = paymentService.update(1L, paymentDTO);
         assertEquals("12345", result.contract_number());

@@ -18,6 +18,8 @@ import org.qred.payment.repository.PaymentRepository;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.service.PaymentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -45,11 +47,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public PaymentDTO save(PaymentDTO dto) {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public PaymentDTO update(Long id, PaymentDTO dto) {
         Payment payment = repository.findById(id).orElseThrow();
 

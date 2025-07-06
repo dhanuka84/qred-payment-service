@@ -15,6 +15,8 @@ import org.qred.payment.mapper.ContractMapper;
 import org.qred.payment.repository.ContractRepository;
 import org.qred.payment.service.ContractService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -38,11 +40,13 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public ContractDTO save(ContractDTO dto) {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public ContractDTO update(Long id, ContractDTO dto) {
         Contract contract = repository.findById(id).orElseThrow();
         contract.setContractNumber(dto.contractNumber());

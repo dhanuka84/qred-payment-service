@@ -15,6 +15,8 @@ import org.qred.payment.mapper.ContractMapper;
 import org.qred.payment.repository.ContractRepository;
 import org.qred.payment.service.ContractService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -22,36 +24,38 @@ public class ContractServiceImpl implements ContractService {
     private final ContractRepository repository;
     private final ContractMapper mapper;
 
-<span class="fc" id="L25">    public ContractServiceImpl(ContractRepository repository, ContractMapper mapper) {</span>
-<span class="fc" id="L26">        this.repository = repository;</span>
-<span class="fc" id="L27">        this.mapper = mapper;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L27">    public ContractServiceImpl(ContractRepository repository, ContractMapper mapper) {</span>
+<span class="fc" id="L28">        this.repository = repository;</span>
+<span class="fc" id="L29">        this.mapper = mapper;</span>
+<span class="fc" id="L30">    }</span>
 
     @Override
     public List&lt;ContractDTO&gt; findAll() {
-<span class="fc" id="L32">        return repository.findAll().stream().map(mapper::toDTO).toList();</span>
+<span class="fc" id="L34">        return repository.findAll().stream().map(mapper::toDTO).toList();</span>
     }
 
     @Override
     public ContractDTO findById(Long id) {
-<span class="fc" id="L37">        return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
+<span class="fc" id="L39">        return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public ContractDTO save(ContractDTO dto) {
-<span class="fc" id="L42">        return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
+<span class="fc" id="L45">        return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public ContractDTO update(Long id, ContractDTO dto) {
-<span class="fc" id="L47">        Contract contract = repository.findById(id).orElseThrow();</span>
-<span class="fc" id="L48">        contract.setContractNumber(dto.contractNumber());</span>
-<span class="fc" id="L49">        return mapper.toDTO(repository.save(contract));</span>
+<span class="fc" id="L51">        Contract contract = repository.findById(id).orElseThrow();</span>
+<span class="fc" id="L52">        contract.setContractNumber(dto.contractNumber());</span>
+<span class="fc" id="L53">        return mapper.toDTO(repository.save(contract));</span>
     }
 
 	@Override
 	public Optional&lt;Contract&gt; findByContractNumber(String contractNumber) {
-<span class="nc" id="L54">		return repository.findByContractNumber(contractNumber);</span>
+<span class="nc" id="L58">		return repository.findByContractNumber(contractNumber);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

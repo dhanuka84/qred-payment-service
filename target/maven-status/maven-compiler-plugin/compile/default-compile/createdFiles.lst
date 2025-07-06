@@ -20,6 +20,7 @@ org/qred/payment/domain/ContractCreateDTO.class
 org/qred/payment/repository/PaymentRepository.class
 org/qred/payment/validator/CotractValidator.class
 org/qred/payment/PaymentApplication.class
+org/qred/payment/config/VirtualThreadConfig.class
 org/qred/payment/domain/PaymentDTO.class
 org/qred/payment/api/v1/ContractController.class
 org/qred/payment/domain/ClientDTO.class

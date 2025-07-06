@@ -13,6 +13,7 @@ payment-service,org.qred.payment.exception,Http400BadRequest,26,0,2,0,10,0,5,0,4
 payment-service,org.qred.payment.exception,Http404NotFoundException,9,0,0,0,4,0,2,0,2,0
 payment-service,org.qred.payment.exception,ErrorResponse,63,0,0,0,13,0,11,0,11,0
 payment-service,org.qred.payment.config,ValidationConfig,7,0,0,0,2,0,2,0,2,0
+payment-service,org.qred.payment.config,VirtualThreadConfig,38,0,6,0,11,0,8,0,5,0
 payment-service,org.qred.payment.api.v1,ClientController,0,53,0,0,0,14,0,5,0,5
 payment-service,org.qred.payment.api.v1,PaymentController,21,120,1,5,6,29,2,8,1,6
 payment-service,org.qred.payment.api.v1,ContractController,0,52,0,0,0,14,0,5,0,5

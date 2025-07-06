@@ -52,6 +52,14 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDTO save(PaymentDTO dto) {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
+    
+	/*
+	 * @Override
+	 * 
+	 * @Transactional(propagation = Propagation.REQUIRED) public PaymentDTO
+	 * save(PaymentDTO dto) { return
+	 * mapper.toDTO(repository.save(mapper.toEntity(dto))); }
+	 */
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

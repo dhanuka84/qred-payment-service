@@ -18,6 +18,7 @@
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/validator/PaymentValidator.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/mapper/ContractMapper.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/repository/ClientRepository.java
+/home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/config/VirtualThreadConfig.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/validator/ClientValidator.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/api/v1/PaymentController.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/repository/PaymentRepository.java

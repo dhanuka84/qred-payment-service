@@ -22,6 +22,9 @@ import org.qred.payment.mapper.PaymentMapper;
 import org.qred.payment.repository.PaymentRepository;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.service.PaymentService;
+import org.qred.payment.validator.PaymentValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
+	
+	private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
 	private final PaymentRepository repository;
 	private final PaymentMapper mapper;
@@ -59,30 +64,49 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Async
-	@Override
-	public CompletableFuture<List<PaymentDTO>> saveAsynch(List<PaymentDTO> payments) {
+    @Override
+    public CompletableFuture<List<PaymentDTO>> saveAsynch(List<PaymentDTO> payments, PaymentValidator validator) {
+        
+        // ✅ Validate and collect only valid DTOs
+        List<PaymentDTO> validPayments = payments.stream()
+            .filter(dto -> {
+                try {
+                    validator.validatePaymentRequest(dto);
+                    return true;
+                } catch (Exception e) {
+                    log.warn("Validation failed for PaymentDTO: {}", dto, e);
+                    return false;
+                }
+            })
+            .toList();
 
-		Map<String, List<PaymentDTO>> paymentsByContracts = payments.stream().collect(Collectors.groupingBy(PaymentDTO::contract_number));
-		Set<String> contractNumbers = paymentsByContracts.keySet();
-		
-		List<Contract> contracts = contractService.findAllByContractNumbers(contractNumbers);
-		Map<String, Contract> contractsByContractNumber = contracts.stream()
-	            .collect(Collectors.toMap(Contract::getContractNumber, Function.identity()));
-		
-		
-		 // Convert and collect all Payment entities
-	    List<Payment> paymentEntities = payments.stream()
-	            .map(dto -> {
-	                Contract contract = contractsByContractNumber.get(dto.contract_number());
-	                if (contract == null) {
-	                    throw new IllegalArgumentException("Contract not found for number: " + dto.contract_number());
-	                }
-	                return mapper.toEntity(dto, contract);
-	            })
-	            .collect(Collectors.toList());
+        if (validPayments.isEmpty()) {
+            log.warn("No valid PaymentDTOs to process.");
+            return CompletableFuture.completedFuture(List.of());
+        }
 
-	    return savePayments(paymentEntities);
-	}
+        Map<String, List<PaymentDTO>> paymentsByContracts = validPayments.stream()
+                .collect(Collectors.groupingBy(PaymentDTO::contract_number));
+
+        Set<String> contractNumbers = paymentsByContracts.keySet();
+
+        List<Contract> contracts = contractService.findAllByContractNumbers(contractNumbers);
+        Map<String, Contract> contractsByContractNumber = contracts.stream()
+                .collect(Collectors.toMap(Contract::getContractNumber, Function.identity()));
+
+        List<Payment> paymentEntities = validPayments.stream()
+                .map(dto -> {
+                    Contract contract = contractsByContractNumber.get(dto.contract_number());
+                    if (contract == null) {
+                        log.error("Contract not found for number: {}", dto.contract_number());
+                        throw new IllegalArgumentException("Contract not found for number: " + dto.contract_number());
+                    }
+                    return mapper.toEntity(dto, contract);
+                })
+                .collect(Collectors.toList());
+
+        return savePayments(paymentEntities);
+    }
 	
 	@Transactional(propagation = Propagation.REQUIRED)
 	private CompletableFuture<List<PaymentDTO>> savePayments(List<Payment> paymentEntities){

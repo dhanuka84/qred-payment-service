@@ -66,11 +66,11 @@ public class PaymentController {
 <span class="fc" id="L66">                        row[3].trim()</span>
                 );
 
-<span class="fc" id="L69">                validator.validatePaymentRequest(dto);</span>
+                //validator.validatePaymentRequest(dto);
 <span class="fc" id="L70">                payments.add(dto);</span>
 <span class="fc" id="L71">            }</span>
             
-<span class="fc" id="L73">            paymentService.saveAsynch(payments);</span>
+<span class="fc" id="L73">            paymentService.saveAsynch(payments, validator);</span>
             //payments.forEach(paymentService::save);
 <span class="fc" id="L75">            return ResponseEntity.ok(&quot;Successfully processed &quot; + payments.size() + &quot; payments.&quot;);</span>
 <span class="nc" id="L76">        } catch (Exception e) {</span>

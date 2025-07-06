@@ -22,6 +22,9 @@ import org.qred.payment.mapper.PaymentMapper;
 import org.qred.payment.repository.PaymentRepository;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.service.PaymentService;
+import org.qred.payment.validator.PaymentValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,72 +32,93 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
+	
+<span class="fc" id="L36">	private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);</span>
 
 	private final PaymentRepository repository;
 	private final PaymentMapper mapper;
 	private final ContractService contractService;
 
-<span class="fc" id="L37">	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;);</span>
+<span class="fc" id="L42">	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;);</span>
 
-<span class="fc" id="L39">	public PaymentServiceImpl(PaymentRepository repository, ContractService contractService, PaymentMapper mapper) {</span>
-<span class="fc" id="L40">		this.repository = repository;</span>
-<span class="fc" id="L41">		this.mapper = mapper;</span>
-<span class="fc" id="L42">		this.contractService = contractService;</span>
-<span class="fc" id="L43">	}</span>
+<span class="fc" id="L44">	public PaymentServiceImpl(PaymentRepository repository, ContractService contractService, PaymentMapper mapper) {</span>
+<span class="fc" id="L45">		this.repository = repository;</span>
+<span class="fc" id="L46">		this.mapper = mapper;</span>
+<span class="fc" id="L47">		this.contractService = contractService;</span>
+<span class="fc" id="L48">	}</span>
 
 	@Override
 	public List&lt;PaymentDTO&gt; findAll() {
-<span class="fc" id="L47">		return repository.findAll().stream().map(mapper::toDTO).toList();</span>
+<span class="fc" id="L52">		return repository.findAll().stream().map(mapper::toDTO).toList();</span>
 	}
 
 	@Override
 	public PaymentDTO findById(Long id) {
-<span class="fc" id="L52">		return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
+<span class="fc" id="L57">		return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public PaymentDTO save(PaymentDTO dto) {
-<span class="fc" id="L58">		return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
+<span class="fc" id="L63">		return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
 	}
 
 	@Async
-	@Override
-	public CompletableFuture&lt;List&lt;PaymentDTO&gt;&gt; saveAsynch(List&lt;PaymentDTO&gt; payments) {
+    @Override
+    public CompletableFuture&lt;List&lt;PaymentDTO&gt;&gt; saveAsynch(List&lt;PaymentDTO&gt; payments, PaymentValidator validator) {
+        
+        // ✅ Validate and collect only valid DTOs
+<span class="nc" id="L71">        List&lt;PaymentDTO&gt; validPayments = payments.stream()</span>
+<span class="nc" id="L72">            .filter(dto -&gt; {</span>
+                try {
+<span class="nc" id="L74">                    validator.validatePaymentRequest(dto);</span>
+<span class="nc" id="L75">                    return true;</span>
+<span class="nc" id="L76">                } catch (Exception e) {</span>
+<span class="nc" id="L77">                    log.warn(&quot;Validation failed for PaymentDTO: {}&quot;, dto, e);</span>
+<span class="nc" id="L78">                    return false;</span>
+                }
+            })
+<span class="nc" id="L81">            .toList();</span>
 
-<span class="nc" id="L65">		Map&lt;String, List&lt;PaymentDTO&gt;&gt; paymentsByContracts = payments.stream().collect(Collectors.groupingBy(PaymentDTO::contract_number));</span>
-<span class="nc" id="L66">		Set&lt;String&gt; contractNumbers = paymentsByContracts.keySet();</span>
-		
-<span class="nc" id="L68">		List&lt;Contract&gt; contracts = contractService.findAllByContractNumbers(contractNumbers);</span>
-<span class="nc" id="L69">		Map&lt;String, Contract&gt; contractsByContractNumber = contracts.stream()</span>
-<span class="nc" id="L70">	            .collect(Collectors.toMap(Contract::getContractNumber, Function.identity()));</span>
-		
-		
-		 // Convert and collect all Payment entities
-<span class="nc" id="L74">	    List&lt;Payment&gt; paymentEntities = payments.stream()</span>
-<span class="nc" id="L75">	            .map(dto -&gt; {</span>
-<span class="nc" id="L76">	                Contract contract = contractsByContractNumber.get(dto.contract_number());</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">	                if (contract == null) {</span>
-<span class="nc" id="L78">	                    throw new IllegalArgumentException(&quot;Contract not found for number: &quot; + dto.contract_number());</span>
-	                }
-<span class="nc" id="L80">	                return mapper.toEntity(dto, contract);</span>
-	            })
-<span class="nc" id="L82">	            .collect(Collectors.toList());</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (validPayments.isEmpty()) {</span>
+<span class="nc" id="L84">            log.warn(&quot;No valid PaymentDTOs to process.&quot;);</span>
+<span class="nc" id="L85">            return CompletableFuture.completedFuture(List.of());</span>
+        }
 
-<span class="nc" id="L84">	    return savePayments(paymentEntities);</span>
-	}
+<span class="nc" id="L88">        Map&lt;String, List&lt;PaymentDTO&gt;&gt; paymentsByContracts = validPayments.stream()</span>
+<span class="nc" id="L89">                .collect(Collectors.groupingBy(PaymentDTO::contract_number));</span>
+
+<span class="nc" id="L91">        Set&lt;String&gt; contractNumbers = paymentsByContracts.keySet();</span>
+
+<span class="nc" id="L93">        List&lt;Contract&gt; contracts = contractService.findAllByContractNumbers(contractNumbers);</span>
+<span class="nc" id="L94">        Map&lt;String, Contract&gt; contractsByContractNumber = contracts.stream()</span>
+<span class="nc" id="L95">                .collect(Collectors.toMap(Contract::getContractNumber, Function.identity()));</span>
+
+<span class="nc" id="L97">        List&lt;Payment&gt; paymentEntities = validPayments.stream()</span>
+<span class="nc" id="L98">                .map(dto -&gt; {</span>
+<span class="nc" id="L99">                    Contract contract = contractsByContractNumber.get(dto.contract_number());</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                    if (contract == null) {</span>
+<span class="nc" id="L101">                        log.error(&quot;Contract not found for number: {}&quot;, dto.contract_number());</span>
+<span class="nc" id="L102">                        throw new IllegalArgumentException(&quot;Contract not found for number: &quot; + dto.contract_number());</span>
+                    }
+<span class="nc" id="L104">                    return mapper.toEntity(dto, contract);</span>
+                })
+<span class="nc" id="L106">                .collect(Collectors.toList());</span>
+
+<span class="nc" id="L108">        return savePayments(paymentEntities);</span>
+    }
 	
 	@Transactional(propagation = Propagation.REQUIRED)
 	private CompletableFuture&lt;List&lt;PaymentDTO&gt;&gt; savePayments(List&lt;Payment&gt; paymentEntities){
 		// Save all Payment entities
-<span class="nc" id="L90">	    List&lt;Payment&gt; savedPayments = repository.saveAll(paymentEntities);</span>
+<span class="nc" id="L114">	    List&lt;Payment&gt; savedPayments = repository.saveAll(paymentEntities);</span>
 
 	    // Convert back to DTOs
-<span class="nc" id="L93">	    List&lt;PaymentDTO&gt; savedDtos = savedPayments.stream()</span>
-<span class="nc" id="L94">	            .map(mapper::toDTO)</span>
-<span class="nc" id="L95">	            .collect(Collectors.toList());</span>
+<span class="nc" id="L117">	    List&lt;PaymentDTO&gt; savedDtos = savedPayments.stream()</span>
+<span class="nc" id="L118">	            .map(mapper::toDTO)</span>
+<span class="nc" id="L119">	            .collect(Collectors.toList());</span>
 
-<span class="nc" id="L97">	    return CompletableFuture.completedFuture(savedDtos);</span>
+<span class="nc" id="L121">	    return CompletableFuture.completedFuture(savedDtos);</span>
 
 	}
 	
@@ -102,26 +126,26 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public PaymentDTO update(Long id, PaymentDTO dto) {
-<span class="fc" id="L105">		Payment payment = repository.findById(id).orElseThrow();</span>
+<span class="fc" id="L129">		Payment payment = repository.findById(id).orElseThrow();</span>
 
 		// Parse date from String
-<span class="fc" id="L108">		LocalDate paymentDate = LocalDate.parse(dto.paymentDate(), DATE_FORMATTER);</span>
-<span class="fc" id="L109">		payment.setPaymentDate(paymentDate);</span>
-<span class="fc" id="L110">		payment.setAmount(dto.amount());</span>
-<span class="fc" id="L111">		payment.setType(dto.type());</span>
+<span class="fc" id="L132">		LocalDate paymentDate = LocalDate.parse(dto.paymentDate(), DATE_FORMATTER);</span>
+<span class="fc" id="L133">		payment.setPaymentDate(paymentDate);</span>
+<span class="fc" id="L134">		payment.setAmount(dto.amount());</span>
+<span class="fc" id="L135">		payment.setType(dto.type());</span>
 
 		// Update contract
-<span class="fc" id="L114">		Contract contract = contractService.findByContractNumber(dto.contract_number())</span>
-<span class="pc" id="L115">				.orElseThrow(() -&gt; new IllegalArgumentException(&quot;Contract not found: &quot; + dto.contract_number()));</span>
-<span class="fc" id="L116">		payment.setContract(contract);</span>
+<span class="fc" id="L138">		Contract contract = contractService.findByContractNumber(dto.contract_number())</span>
+<span class="pc" id="L139">				.orElseThrow(() -&gt; new IllegalArgumentException(&quot;Contract not found: &quot; + dto.contract_number()));</span>
+<span class="fc" id="L140">		payment.setContract(contract);</span>
 
-<span class="fc" id="L118">		return mapper.toDTO(repository.save(payment));</span>
+<span class="fc" id="L142">		return mapper.toDTO(repository.save(payment));</span>
 	}
 
 	@Override
 	public List&lt;PaymentDTO&gt; findPaymentsByContractNumber(String contractNumber) {
-<span class="fc" id="L123">		List&lt;Payment&gt; payments = repository.findPaymentsByContractNumber(contractNumber);</span>
-<span class="fc" id="L124">		return payments.stream().map(mapper::toDTO).collect(Collectors.toList());</span>
+<span class="fc" id="L147">		List&lt;Payment&gt; payments = repository.findPaymentsByContractNumber(contractNumber);</span>
+<span class="fc" id="L148">		return payments.stream().map(mapper::toDTO).collect(Collectors.toList());</span>
 	}
 
 }

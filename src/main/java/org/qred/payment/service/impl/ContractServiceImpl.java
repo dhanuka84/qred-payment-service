@@ -2,6 +2,7 @@ package org.qred.payment.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.qred.payment.domain.ContractCreateDTO;
 
@@ -58,5 +59,10 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public Optional<Contract> findByContractNumber(String contractNumber) {
 		return repository.findByContractNumber(contractNumber);
+	}
+
+	@Override
+	public List<Contract> findAllByContractNumbers(Set<String> contractNumbers) {
+		return repository.findAllByContractNumberIn(contractNumbers);
 	}
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-06T17:25:14+0200",
+    date = "2025-07-06T20:09:59+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)"
 )
 @Component
@@ -47,6 +47,23 @@ public class PaymentMapperImpl extends PaymentMapper {
         payment.setPaymentDate( stringToLocalDate( dto.paymentDate() ) );
         payment.setAmount( dto.amount() );
         payment.setType( dto.type() );
+
+        return payment;
+    }
+
+    @Override
+    public Payment toEntity(PaymentDTO dto, Contract contract) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        Payment payment = new Payment();
+
+        payment.setPaymentDate( stringToLocalDate( dto.paymentDate() ) );
+        payment.setAmount( dto.amount() );
+        payment.setType( dto.type() );
+
+        setContract( payment, contract );
 
         return payment;
     }

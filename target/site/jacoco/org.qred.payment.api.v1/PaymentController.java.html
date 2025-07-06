@@ -70,7 +70,7 @@ public class PaymentController {
 <span class="fc" id="L70">                payments.add(dto);</span>
 <span class="fc" id="L71">            }</span>
             
-<span class="fc" id="L73">            payments.forEach(paymentService::saveAsynch);</span>
+<span class="fc" id="L73">            paymentService.saveAsynch(payments);</span>
             //payments.forEach(paymentService::save);
 <span class="fc" id="L75">            return ResponseEntity.ok(&quot;Successfully processed &quot; + payments.size() + &quot; payments.&quot;);</span>
 <span class="nc" id="L76">        } catch (Exception e) {</span>

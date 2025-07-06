@@ -32,25 +32,34 @@ import java.time.format.DateTimeFormatter;
     @Mapping(source = &quot;contract_number&quot;, target = &quot;contract&quot;, qualifiedByName = &quot;contractFromNumber&quot;)
     @Mapping(source = &quot;paymentDate&quot;, target = &quot;paymentDate&quot;, qualifiedByName = &quot;stringToLocalDate&quot;)
     public abstract Payment toEntity(PaymentDTO dto);
+    
+    @Mapping(target = &quot;paymentId&quot;, ignore = true)
+    @Mapping(source = &quot;paymentDate&quot;, target = &quot;paymentDate&quot;, qualifiedByName = &quot;stringToLocalDate&quot;)
+    public abstract Payment toEntity(PaymentDTO dto, @Context Contract contract);
+
+    @AfterMapping
+    protected void setContract(@MappingTarget Payment payment, @Context Contract contract) {
+<span class="nc" id="L42">        payment.setContract(contract);</span>
+<span class="nc" id="L43">    }</span>
 
     @Named(&quot;stringToLocalDate&quot;)
     protected LocalDate stringToLocalDate(String date) {
-<span class="fc" id="L38">        return LocalDate.parse(date, DATE_FORMATTER);</span>
+<span class="fc" id="L47">        return LocalDate.parse(date, DATE_FORMATTER);</span>
     }
 
     @Named(&quot;localDateToString&quot;)
     protected String localDateToString(LocalDate date) {
-<span class="fc" id="L43">        return date.format(DATE_FORMATTER);</span>
+<span class="fc" id="L52">        return date.format(DATE_FORMATTER);</span>
     }
 
     @Named(&quot;contractFromNumber&quot;)
     protected Contract contractFromNumber(String contractNumber) {
-<span class="fc" id="L48">        return contractRepository.findByContractNumber(contractNumber)</span>
-<span class="pc" id="L49">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Contract not found: &quot; + contractNumber));</span>
+<span class="fc" id="L57">        return contractRepository.findByContractNumber(contractNumber)</span>
+<span class="pc" id="L58">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Contract not found: &quot; + contractNumber));</span>
     }
     
     public void setContractRepository(ContractRepository contractRepository) {
-<span class="fc" id="L53">    	this.contractRepository = contractRepository;</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L62">    	this.contractRepository = contractRepository;</span>
+<span class="fc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

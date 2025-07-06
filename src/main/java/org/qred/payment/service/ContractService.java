@@ -2,6 +2,7 @@ package org.qred.payment.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
@@ -13,4 +14,5 @@ public interface ContractService {
     ContractDTO save(ContractCreateDTO dto);
     ContractDTO update(Long id, ContractDTO dto);
     Optional<Contract> findByContractNumber(String contractNumber);
+    List<Contract> findAllByContractNumbers(Set<String> contractNumbers);
 }

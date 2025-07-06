@@ -32,6 +32,15 @@ public abstract class PaymentMapper {
     @Mapping(source = "contract_number", target = "contract", qualifiedByName = "contractFromNumber")
     @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "stringToLocalDate")
     public abstract Payment toEntity(PaymentDTO dto);
+    
+    @Mapping(target = "paymentId", ignore = true)
+    @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "stringToLocalDate")
+    public abstract Payment toEntity(PaymentDTO dto, @Context Contract contract);
+
+    @AfterMapping
+    protected void setContract(@MappingTarget Payment payment, @Context Contract contract) {
+        payment.setContract(contract);
+    }
 
     @Named("stringToLocalDate")
     protected LocalDate stringToLocalDate(String date) {

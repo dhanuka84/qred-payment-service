@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
-    date = &quot;2025-07-06T17:25:14+0200&quot;,
+    date = &quot;2025-07-06T20:09:59+0200&quot;,
     comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)&quot;
 )
 @Component
@@ -51,19 +51,36 @@ import org.springframework.stereotype.Component;
 <span class="fc" id="L51">        return payment;</span>
     }
 
+    @Override
+    public Payment toEntity(PaymentDTO dto, Contract contract) {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L57">            return null;</span>
+        }
+
+<span class="nc" id="L60">        Payment payment = new Payment();</span>
+
+<span class="nc" id="L62">        payment.setPaymentDate( stringToLocalDate( dto.paymentDate() ) );</span>
+<span class="nc" id="L63">        payment.setAmount( dto.amount() );</span>
+<span class="nc" id="L64">        payment.setType( dto.type() );</span>
+
+<span class="nc" id="L66">        setContract( payment, contract );</span>
+
+<span class="nc" id="L68">        return payment;</span>
+    }
+
     private String paymentContractContractNumber(Payment payment) {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if ( payment == null ) {</span>
-<span class="nc" id="L56">            return null;</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if ( payment == null ) {</span>
+<span class="nc" id="L73">            return null;</span>
         }
-<span class="fc" id="L58">        Contract contract = payment.getContract();</span>
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
-<span class="nc" id="L60">            return null;</span>
+<span class="fc" id="L75">        Contract contract = payment.getContract();</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
+<span class="nc" id="L77">            return null;</span>
         }
-<span class="fc" id="L62">        String contractNumber = contract.getContractNumber();</span>
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if ( contractNumber == null ) {</span>
-<span class="nc" id="L64">            return null;</span>
+<span class="fc" id="L79">        String contractNumber = contract.getContractNumber();</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if ( contractNumber == null ) {</span>
+<span class="nc" id="L81">            return null;</span>
         }
-<span class="fc" id="L66">        return contractNumber;</span>
+<span class="fc" id="L83">        return contractNumber;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

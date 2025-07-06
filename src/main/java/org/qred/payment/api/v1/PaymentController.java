@@ -70,7 +70,7 @@ public class PaymentController {
                 payments.add(dto);
             }
             
-            payments.forEach(paymentService::saveAsynch);
+            paymentService.saveAsynch(payments);
             //payments.forEach(paymentService::save);
             return ResponseEntity.ok("Successfully processed " + payments.size() + " payments.");
         } catch (Exception e) {

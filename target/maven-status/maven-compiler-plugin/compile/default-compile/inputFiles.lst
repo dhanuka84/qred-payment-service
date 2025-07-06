@@ -21,6 +21,7 @@
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/repository/PaymentRepository.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/mapper/ClientMapper.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/exception/Http400BadRequest.java
+/home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/config/ValidationConfig.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/validator/RestValidator.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/exception/handler/CustomExceptionHandler.java
 /home/dhanuka84/research/qred/qred-payment-service-updated/src/main/java/org/qred/payment/api/v1/ContractController.java

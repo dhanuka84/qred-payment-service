@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: org.qred.payment.service.PaymentServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.135 s <<< FAILURE! -- in org.qred.payment.service.PaymentServiceImplTest
-org.qred.payment.service.PaymentServiceImplTest.shouldSavePayment -- Time elapsed: 0.007 s <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.119 s <<< FAILURE! -- in org.qred.payment.service.PaymentServiceImplTest
+org.qred.payment.service.PaymentServiceImplTest.shouldSavePayment -- Time elapsed: 0.010 s <<< ERROR!
 java.lang.NullPointerException: Cannot invoke "org.qred.payment.repository.ContractRepository.findByContractNumber(String)" because "<local3>.contractRepository" is null
 	at org.qred.payment.mapper.PaymentMapper.contractFromNumber(PaymentMapper.java:48)
 	at org.qred.payment.mapper.PaymentMapperImpl.toEntity(PaymentMapperImpl.java:46)

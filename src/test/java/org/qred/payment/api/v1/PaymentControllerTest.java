@@ -83,7 +83,7 @@ public class PaymentControllerTest {
         mockMvc.perform(post("/api/v1/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.amount").value(300.0))
                 .andExpect(jsonPath("$.contract_number").value("C999"));
     }

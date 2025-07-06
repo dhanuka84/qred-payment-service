@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: org.qred.payment.service.ContractServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.131 s <<< FAILURE! -- in org.qred.payment.service.ContractServiceImplTest
-org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract -- Time elapsed: 0.119 s <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.123 s <<< FAILURE! -- in org.qred.payment.service.ContractServiceImplTest
+org.qred.payment.service.ContractServiceImplTest.shouldUpdateContract -- Time elapsed: 0.106 s <<< ERROR!
 org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
 
 Unnecessary stubbings detected.

@@ -11,6 +11,8 @@ import java.util.List;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.validator.RestValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,8 +37,9 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
-    public List<ContractDTO> getAllContracts() {
-        return contractService.findAll();
+    public ResponseEntity<List<ContractDTO>> getAllContracts() {
+        List<ContractDTO> contracts = contractService.findAll();
+        return ResponseEntity.ok(contracts);
     }
 
     @Operation(summary = "Get a contract by ID.", description = "Fetch a single contract by ID.")
@@ -46,8 +49,9 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}")
-    public ContractDTO getContractById(@PathVariable Long id) {
-        return contractService.findById(id);
+    public ResponseEntity<ContractDTO> getContractById(@PathVariable Long id) {
+        ContractDTO contract = contractService.findById(id);
+        return ResponseEntity.ok(contract);
     }
 
     @Operation(summary = "Create contract entity.", description = "Create a new contract.")
@@ -57,9 +61,10 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public ContractDTO createContract(@RequestBody ContractDTO contract) {
+    public ResponseEntity<ContractDTO> createContract(@RequestBody ContractDTO contract) {
         validator.validateCreate(contract);
-        return contractService.save(contract);
+        ContractDTO saved = contractService.save(contract);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @Operation(summary = "Update a contract.", description = "Update an existing contract.")
@@ -70,8 +75,9 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    public ContractDTO updateContract(@PathVariable Long id, @RequestBody ContractDTO contract) {
+    public ResponseEntity<ContractDTO> updateContract(@PathVariable Long id, @RequestBody ContractDTO contract) {
         validator.validateUpdateRequest(id, contract);
-        return contractService.update(id, contract);
+        ContractDTO updated = contractService.update(id, contract);
+        return ResponseEntity.ok(updated);
     }
 }

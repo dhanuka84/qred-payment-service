@@ -4,25 +4,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author : Dhanuka Ranasinghe
- * @since : Date: 05/07/2025
- */
-
 import org.qred.payment.domain.PaymentDTO;
 import org.qred.payment.service.PaymentService;
 import org.qred.payment.validator.RestValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -66,31 +53,33 @@ public class PaymentController {
                 if (row.length < 4) continue;
 
                 PaymentDTO dto = new PaymentDTO(
-                        (row[0].trim()),
+                        row[0].trim(),
                         Double.parseDouble(row[1].trim()),
                         row[2].trim(),
                         row[3].trim()
                 );
 
-                validator.validatePaymentRequest(dto); // Optional validation
+                validator.validatePaymentRequest(dto);
                 payments.add(dto);
             }
 
             payments.forEach(paymentService::save);
             return ResponseEntity.ok("Successfully processed " + payments.size() + " payments.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing file: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing file: " + e.getMessage());
         }
     }
-    
+
     @Operation(summary = "Get all payments.", description = "Fetch all payment records.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful retrieval."),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
-    public List<PaymentDTO> getAllPayments() {
-        return paymentService.findAll();
+    public ResponseEntity<List<PaymentDTO>> getAllPayments() {
+        List<PaymentDTO> payments = paymentService.findAll();
+        return ResponseEntity.ok(payments);
     }
 
     @Operation(summary = "Get a payment by ID.", description = "Fetch a single payment by ID.")
@@ -100,8 +89,9 @@ public class PaymentController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}")
-    public PaymentDTO getPaymentById(@PathVariable Long id) {
-        return paymentService.findById(id);
+    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Long id) {
+        PaymentDTO payment = paymentService.findById(id);
+        return ResponseEntity.ok(payment);
     }
 
     @Operation(summary = "Create payment entity.", description = "Create a new payment.")
@@ -111,8 +101,9 @@ public class PaymentController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public PaymentDTO createPayment(@Valid @RequestBody PaymentDTO payment) {
-        return paymentService.save(payment);
+    public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO payment) {
+        PaymentDTO created = paymentService.save(payment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @Operation(summary = "Update a payment.", description = "Update an existing payment.")
@@ -123,8 +114,8 @@ public class PaymentController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    public PaymentDTO updatePayment(@PathVariable Long id, @Valid @RequestBody PaymentDTO payment) {
-        return paymentService.update(id, payment);
+    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @Valid @RequestBody PaymentDTO payment) {
+        PaymentDTO updated = paymentService.update(id, payment);
+        return ResponseEntity.ok(updated);
     }
-    
 }

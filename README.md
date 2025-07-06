@@ -14,3 +14,6 @@ http://localhost:8080/swagger-ui/index.html#/
 
 #Spring Boot Operations
 $ mvn spring-boot:run
+
+#Spring Boot Health
+http://localhost:8080/actuator/health

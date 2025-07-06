@@ -30,3 +30,4 @@ org/qred/payment/entity/Client.class
 org/qred/payment/service/PaymentService.class
 org/qred/payment/api/v1/ClientController.class
 org/qred/payment/exception/handler/CustomExceptionHandler.class
+org/qred/payment/config/ValidationConfig.class

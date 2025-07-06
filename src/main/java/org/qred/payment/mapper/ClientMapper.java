@@ -8,6 +8,7 @@ package org.qred.payment.mapper;
  */
 
 import org.mapstruct.Mapper;
+import org.qred.payment.domain.ClientCreateDTO;
 import org.qred.payment.domain.ClientDTO;
 import org.qred.payment.entity.Client;
 
@@ -15,4 +16,5 @@ import org.qred.payment.entity.Client;
 public interface ClientMapper {
     ClientDTO toDTO(Client client);
     Client toEntity(ClientDTO dto);
+    Client toEntity(ClientCreateDTO dto);
 }

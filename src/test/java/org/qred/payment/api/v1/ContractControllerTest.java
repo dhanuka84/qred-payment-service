@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.validator.CotractValidator;
@@ -71,7 +72,7 @@ public class ContractControllerTest {
     void shouldCreateContract() throws Exception {
         String requestJson = "{\"clientId\":1,\"contractNumber\":\"12345\"}";
 
-        ContractDTO requestDTO = new ContractDTO(null, 1L, "12345");
+        ContractCreateDTO requestDTO = new ContractCreateDTO( 1L, "12345");
         ContractDTO responseDTO = new ContractDTO(1L, 1L, "12345");
 
         when(contractService.save(requestDTO)).thenReturn(responseDTO);

@@ -2,6 +2,8 @@ package org.qred.payment.service.impl;
 
 import java.util.List;
 
+import org.qred.payment.domain.ClientCreateDTO;
+
 /**
  *
  * @author : Dhanuka Ranasinghe
@@ -39,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public ClientDTO save(ClientDTO dto) {
+    public ClientDTO save(ClientCreateDTO dto) {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
 

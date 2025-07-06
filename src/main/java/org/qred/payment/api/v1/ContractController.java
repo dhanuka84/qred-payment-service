@@ -8,6 +8,7 @@ package org.qred.payment.api.v1;
 
 import java.util.List;
 
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.validator.CotractValidator;
@@ -67,7 +68,7 @@ public class ContractController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public ResponseEntity<ContractDTO> createContract(@RequestBody ContractDTO contract) {
+    public ResponseEntity<ContractDTO> createContract(@RequestBody ContractCreateDTO contract) {
         validator.validateCreate(contract);
         ContractDTO saved = contractService.save(contract);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);

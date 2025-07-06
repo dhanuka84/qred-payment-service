@@ -2,6 +2,8 @@
 
 import java.util.List;
 
+import org.qred.payment.domain.ClientCreateDTO;
+
 /**
  *
  * @author : Dhanuka Ranasinghe
@@ -22,33 +24,33 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository repository;
     private final ClientMapper mapper;
 
-<span class="fc" id="L25">    public ClientServiceImpl(ClientRepository repository, ClientMapper mapper) {</span>
-<span class="fc" id="L26">        this.repository = repository;</span>
-<span class="fc" id="L27">        this.mapper = mapper;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L27">    public ClientServiceImpl(ClientRepository repository, ClientMapper mapper) {</span>
+<span class="fc" id="L28">        this.repository = repository;</span>
+<span class="fc" id="L29">        this.mapper = mapper;</span>
+<span class="fc" id="L30">    }</span>
 
     @Override
     public List&lt;ClientDTO&gt; findAll() {
-<span class="fc" id="L32">        return repository.findAll().stream().map(mapper::toDTO).toList();</span>
+<span class="fc" id="L34">        return repository.findAll().stream().map(mapper::toDTO).toList();</span>
     }
 
     @Override
     public ClientDTO findById(Long id) {
-<span class="fc" id="L37">        return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
+<span class="fc" id="L39">        return repository.findById(id).map(mapper::toDTO).orElseThrow();</span>
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public ClientDTO save(ClientDTO dto) {
-<span class="fc" id="L43">        return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
+    public ClientDTO save(ClientCreateDTO dto) {
+<span class="fc" id="L45">        return mapper.toDTO(repository.save(mapper.toEntity(dto)));</span>
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public ClientDTO update(Long id, ClientDTO dto) {
-<span class="fc" id="L49">        Client client = repository.findById(id).orElseThrow();</span>
-<span class="fc" id="L50">        client.setClientName(dto.clientName());</span>
-<span class="fc" id="L51">        return mapper.toDTO(repository.save(client));</span>
+<span class="fc" id="L51">        Client client = repository.findById(id).orElseThrow();</span>
+<span class="fc" id="L52">        client.setClientName(dto.clientName());</span>
+<span class="fc" id="L53">        return mapper.toDTO(repository.save(client));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

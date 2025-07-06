@@ -3,6 +3,7 @@ org/qred/payment/service/ClientService.class
 org/qred/payment/api/v1/PaymentController.class
 org/qred/payment/exception/Http404NotFoundException.class
 org/qred/payment/repository/ClientRepository.class
+org/qred/payment/domain/ClientCreateDTO.class
 org/qred/payment/mapper/ClientMapperImpl.class
 org/qred/payment/repository/ContractRepository.class
 org/qred/payment/validator/ClientValidator.class
@@ -15,16 +16,15 @@ org/qred/payment/domain/ContractDTO.class
 org/qred/payment/validator/PaymentValidator.class
 org/qred/payment/mapper/ContractMapperImpl.class
 org/qred/payment/service/ContractService.class
+org/qred/payment/domain/ContractCreateDTO.class
 org/qred/payment/repository/PaymentRepository.class
 org/qred/payment/validator/CotractValidator.class
 org/qred/payment/PaymentApplication.class
 org/qred/payment/domain/PaymentDTO.class
 org/qred/payment/api/v1/ContractController.class
 org/qred/payment/domain/ClientDTO.class
-org/qred/payment/domain/PaymentResponse.class
 org/qred/payment/service/impl/ClientServiceImpl.class
 org/qred/payment/mapper/ClientMapper.class
-org/qred/payment/domain/PaymentRequest.class
 org/qred/payment/entity/Contract.class
 org/qred/payment/mapper/PaymentMapper.class
 org/qred/payment/exception/ErrorResponse.class

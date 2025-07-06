@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContractMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payment-service</a> &gt; <a href="index.source.html" class="el_package">org.qred.payment.mapper</a> &gt; <span class="el_source">ContractMapperImpl.java</span></div><h1>ContractMapperImpl.java</h1><pre class="source lang-java linenums">package org.qred.payment.mapper;
 
 import javax.annotation.processing.Generated;
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.entity.Client;
 import org.qred.payment.entity.Contract;
@@ -8,59 +9,73 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
-    date = &quot;2025-07-06T14:51:01+0200&quot;,
+    date = &quot;2025-07-06T15:53:52+0200&quot;,
     comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)&quot;
 )
 @Component
-<span class="fc" id="L15">public class ContractMapperImpl extends ContractMapper {</span>
+<span class="fc" id="L16">public class ContractMapperImpl extends ContractMapper {</span>
 
     @Override
     public ContractDTO toDTO(Contract contract) {
-<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
-<span class="nc" id="L20">            return null;</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
+<span class="nc" id="L21">            return null;</span>
         }
 
-<span class="fc" id="L23">        Long clientId = null;</span>
-<span class="fc" id="L24">        Long contractId = null;</span>
-<span class="fc" id="L25">        String contractNumber = null;</span>
+<span class="fc" id="L24">        Long clientId = null;</span>
+<span class="fc" id="L25">        Long contractId = null;</span>
+<span class="fc" id="L26">        String contractNumber = null;</span>
 
-<span class="fc" id="L27">        clientId = contractClientClientId( contract );</span>
-<span class="fc" id="L28">        contractId = contract.getContractId();</span>
-<span class="fc" id="L29">        contractNumber = contract.getContractNumber();</span>
+<span class="fc" id="L28">        clientId = contractClientClientId( contract );</span>
+<span class="fc" id="L29">        contractId = contract.getContractId();</span>
+<span class="fc" id="L30">        contractNumber = contract.getContractNumber();</span>
 
-<span class="fc" id="L31">        ContractDTO contractDTO = new ContractDTO( contractId, clientId, contractNumber );</span>
+<span class="fc" id="L32">        ContractDTO contractDTO = new ContractDTO( contractId, clientId, contractNumber );</span>
 
-<span class="fc" id="L33">        return contractDTO;</span>
+<span class="fc" id="L34">        return contractDTO;</span>
     }
 
     @Override
     public Contract toEntity(ContractDTO dto) {
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if ( dto == null ) {</span>
-<span class="nc" id="L39">            return null;</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L40">            return null;</span>
         }
 
-<span class="fc" id="L42">        Contract contract = new Contract();</span>
+<span class="nc" id="L43">        Contract contract = new Contract();</span>
 
-<span class="fc" id="L44">        contract.setContractId( dto.contractId() );</span>
-<span class="fc" id="L45">        contract.setClient( mapClientIdToClient( dto.clientId() ) );</span>
-<span class="fc" id="L46">        contract.setContractNumber( dto.contractNumber() );</span>
+<span class="nc" id="L45">        contract.setContractId( dto.contractId() );</span>
+<span class="nc" id="L46">        contract.setClient( mapClientIdToClient( dto.clientId() ) );</span>
+<span class="nc" id="L47">        contract.setContractNumber( dto.contractNumber() );</span>
 
-<span class="fc" id="L48">        return contract;</span>
+<span class="nc" id="L49">        return contract;</span>
+    }
+
+    @Override
+    public Contract toEntity(ContractCreateDTO dto) {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L55">            return null;</span>
+        }
+
+<span class="fc" id="L58">        Contract contract = new Contract();</span>
+
+<span class="fc" id="L60">        contract.setClient( mapClientIdToClient( dto.clientId() ) );</span>
+<span class="fc" id="L61">        contract.setContractNumber( dto.contractNumber() );</span>
+
+<span class="fc" id="L63">        return contract;</span>
     }
 
     private Long contractClientClientId(Contract contract) {
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
-<span class="nc" id="L53">            return null;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if ( contract == null ) {</span>
+<span class="nc" id="L68">            return null;</span>
         }
-<span class="fc" id="L55">        Client client = contract.getClient();</span>
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if ( client == null ) {</span>
-<span class="nc" id="L57">            return null;</span>
+<span class="fc" id="L70">        Client client = contract.getClient();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if ( client == null ) {</span>
+<span class="nc" id="L72">            return null;</span>
         }
-<span class="fc" id="L59">        Long clientId = client.getClientId();</span>
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if ( clientId == null ) {</span>
-<span class="nc" id="L61">            return null;</span>
+<span class="fc" id="L74">        Long clientId = client.getClientId();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if ( clientId == null ) {</span>
+<span class="nc" id="L76">            return null;</span>
         }
-<span class="fc" id="L63">        return clientId;</span>
+<span class="fc" id="L78">        return clientId;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

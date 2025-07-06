@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.qred.payment.domain.ClientCreateDTO;
 import org.qred.payment.domain.ClientDTO;
 import org.qred.payment.service.ClientService;
 import org.qred.payment.validator.ClientValidator;
@@ -67,7 +68,7 @@ public class ClientControllerTest {
 
     @Test
     void shouldCreateClient() throws Exception {
-        ClientDTO input = new ClientDTO(null, "NewClient");
+    	ClientCreateDTO input = new ClientCreateDTO("NewClient");
         ClientDTO saved = new ClientDTO(2L, "NewClient");
 
         when(clientService.save(input)).thenReturn(saved);

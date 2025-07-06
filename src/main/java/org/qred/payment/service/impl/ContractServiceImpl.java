@@ -3,6 +3,8 @@ package org.qred.payment.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.qred.payment.domain.ContractCreateDTO;
+
 /**
  *
  * @author : Dhanuka Ranasinghe
@@ -41,7 +43,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public ContractDTO save(ContractDTO dto) {
+    public ContractDTO save(ContractCreateDTO dto) {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
 

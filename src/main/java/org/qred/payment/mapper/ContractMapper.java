@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.entity.Client;
 import org.qred.payment.entity.Contract;
@@ -28,6 +29,9 @@ public abstract class ContractMapper {
     @Mapping(target = "contractId", source = "contractId")
     @Mapping(source = "clientId", target = "client", qualifiedByName = "mapClientIdToClient")
     public abstract Contract toEntity(ContractDTO dto);
+    
+    @Mapping(source = "clientId", target = "client", qualifiedByName = "mapClientIdToClient")
+    public abstract Contract toEntity(ContractCreateDTO dto);
 
     @Named("mapClientIdToClient")
     protected Client mapClientIdToClient(Long clientId) {

@@ -2,6 +2,7 @@ package org.qred.payment.api.v1;
 
 import java.util.List;
 
+import org.qred.payment.domain.ClientCreateDTO;
 import org.qred.payment.domain.ClientDTO;
 import org.qred.payment.service.ClientService;
 import org.qred.payment.validator.ClientValidator;
@@ -65,7 +66,7 @@ public class ClientController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO client) {
+    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientCreateDTO client) {
         validator.validateClientNameRequest(client.clientName());
         ClientDTO savedClient = clientService.save(client);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);

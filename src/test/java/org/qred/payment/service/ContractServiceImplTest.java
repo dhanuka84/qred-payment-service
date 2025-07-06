@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.entity.Client;
 import org.qred.payment.entity.Contract;
@@ -24,7 +25,6 @@ import org.qred.payment.mapper.ContractMapper;
 import org.qred.payment.repository.ClientRepository;
 import org.qred.payment.repository.ContractRepository;
 import org.qred.payment.service.impl.ContractServiceImpl;
-import org.qred.payment.service.impl.PaymentServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractServiceImplTest {
@@ -45,6 +45,7 @@ public class ContractServiceImplTest {
 
     private Contract contract;
     private ContractDTO contractDTO;
+    private ContractCreateDTO contractCreateDTO;
     private Client client;
 
     @BeforeEach
@@ -57,6 +58,7 @@ public class ContractServiceImplTest {
         client = new Client(1L, "Acme");
         contract = new Contract(1L, client, "12345");
         contractDTO = new ContractDTO(1L, 1L, "12345");
+        contractCreateDTO = new ContractCreateDTO(1L, "12345");
     }
 
     @Test
@@ -78,7 +80,7 @@ public class ContractServiceImplTest {
     void shouldSaveContract() {
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         lenient().when(contractRepository.save(any())).thenReturn(contract);
-        ContractDTO result = contractService.save(contractDTO);
+        ContractDTO result = contractService.save(contractCreateDTO);
         assertEquals("12345", result.contractNumber());
     }
 

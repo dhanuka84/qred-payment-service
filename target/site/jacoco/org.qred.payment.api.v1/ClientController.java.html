@@ -2,6 +2,7 @@
 
 import java.util.List;
 
+import org.qred.payment.domain.ClientCreateDTO;
 import org.qred.payment.domain.ClientDTO;
 import org.qred.payment.service.ClientService;
 import org.qred.payment.validator.ClientValidator;
@@ -30,10 +31,10 @@ public class ClientController {
     private final ClientService clientService;
     private final ClientValidator validator;
 
-<span class="fc" id="L33">    public ClientController(ClientService clientService, ClientValidator validator) {</span>
-<span class="fc" id="L34">        this.clientService = clientService;</span>
-<span class="fc" id="L35">        this.validator = validator;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L34">    public ClientController(ClientService clientService, ClientValidator validator) {</span>
+<span class="fc" id="L35">        this.clientService = clientService;</span>
+<span class="fc" id="L36">        this.validator = validator;</span>
+<span class="fc" id="L37">    }</span>
 
     @Operation(summary = &quot;Get all clients.&quot;, description = &quot;Fetch all client records.&quot;)
     @ApiResponses(value = {
@@ -42,8 +43,8 @@ public class ClientController {
     })
     @GetMapping
     public ResponseEntity&lt;List&lt;ClientDTO&gt;&gt; getAllClients() {
-<span class="fc" id="L45">        List&lt;ClientDTO&gt; clients = clientService.findAll();</span>
-<span class="fc" id="L46">        return ResponseEntity.ok(clients);</span>
+<span class="fc" id="L46">        List&lt;ClientDTO&gt; clients = clientService.findAll();</span>
+<span class="fc" id="L47">        return ResponseEntity.ok(clients);</span>
     }
 
     @Operation(summary = &quot;Get a client by ID.&quot;, description = &quot;Fetch a single client by ID.&quot;)
@@ -54,8 +55,8 @@ public class ClientController {
     })
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;ClientDTO&gt; getClientById(@PathVariable Long id) {
-<span class="fc" id="L57">        ClientDTO client = clientService.findById(id);</span>
-<span class="fc" id="L58">        return ResponseEntity.ok(client);</span>
+<span class="fc" id="L58">        ClientDTO client = clientService.findById(id);</span>
+<span class="fc" id="L59">        return ResponseEntity.ok(client);</span>
     }
 
     @Operation(summary = &quot;Create client entity.&quot;, description = &quot;Create client entity.&quot;)
@@ -65,10 +66,10 @@ public class ClientController {
         @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
     })
     @PostMapping
-    public ResponseEntity&lt;ClientDTO&gt; createClient(@RequestBody ClientDTO client) {
-<span class="fc" id="L69">        validator.validateClientNameRequest(client.clientName());</span>
-<span class="fc" id="L70">        ClientDTO savedClient = clientService.save(client);</span>
-<span class="fc" id="L71">        return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);</span>
+    public ResponseEntity&lt;ClientDTO&gt; createClient(@RequestBody ClientCreateDTO client) {
+<span class="fc" id="L70">        validator.validateClientNameRequest(client.clientName());</span>
+<span class="fc" id="L71">        ClientDTO savedClient = clientService.save(client);</span>
+<span class="fc" id="L72">        return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);</span>
     }
 
     @Operation(summary = &quot;Update a client.&quot;, description = &quot;Update an existing client.&quot;)
@@ -80,9 +81,9 @@ public class ClientController {
     })
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;ClientDTO&gt; updateClient(@PathVariable Long id, @RequestBody ClientDTO client) {
-<span class="fc" id="L83">        validator.validateClientNameRequest(client.clientName());</span>
-<span class="fc" id="L84">        ClientDTO updatedClient = clientService.update(id, client);</span>
-<span class="fc" id="L85">        return ResponseEntity.ok(updatedClient);</span>
+<span class="fc" id="L84">        validator.validateClientNameRequest(client.clientName());</span>
+<span class="fc" id="L85">        ClientDTO updatedClient = clientService.update(id, client);</span>
+<span class="fc" id="L86">        return ResponseEntity.ok(updatedClient);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

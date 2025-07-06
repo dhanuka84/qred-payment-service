@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+import org.qred.payment.domain.ContractCreateDTO;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.entity.Client;
 import org.qred.payment.entity.Contract;
@@ -16,7 +17,7 @@ import org.qred.payment.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = &quot;spring&quot;, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-<span class="fc" id="L19">public abstract class ContractMapper {</span>
+<span class="fc" id="L20">public abstract class ContractMapper {</span>
 
 
 	@Autowired
@@ -28,17 +29,20 @@ import org.springframework.beans.factory.annotation.Autowired;
     @Mapping(target = &quot;contractId&quot;, source = &quot;contractId&quot;)
     @Mapping(source = &quot;clientId&quot;, target = &quot;client&quot;, qualifiedByName = &quot;mapClientIdToClient&quot;)
     public abstract Contract toEntity(ContractDTO dto);
+    
+    @Mapping(source = &quot;clientId&quot;, target = &quot;client&quot;, qualifiedByName = &quot;mapClientIdToClient&quot;)
+    public abstract Contract toEntity(ContractCreateDTO dto);
 
     @Named(&quot;mapClientIdToClient&quot;)
     protected Client mapClientIdToClient(Long clientId) {
-<span class="fc" id="L34">        return clientRepository.findById(clientId)</span>
-<span class="pc" id="L35">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Client not found for id: &quot; + clientId));</span>
+<span class="fc" id="L38">        return clientRepository.findById(clientId)</span>
+<span class="pc" id="L39">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Client not found for id: &quot; + clientId));</span>
     }
     
  // In ContractMapper.java
     public void setClientRepository(ClientRepository clientRepository) {
-<span class="fc" id="L40">        this.clientRepository = clientRepository;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L44">        this.clientRepository = clientRepository;</span>
+<span class="fc" id="L45">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

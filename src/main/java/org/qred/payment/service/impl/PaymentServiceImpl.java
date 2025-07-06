@@ -3,6 +3,7 @@ package org.qred.payment.service.impl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -18,6 +19,7 @@ import org.qred.payment.mapper.PaymentMapper;
 import org.qred.payment.repository.PaymentRepository;
 import org.qred.payment.service.ContractService;
 import org.qred.payment.service.PaymentService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,13 +55,13 @@ public class PaymentServiceImpl implements PaymentService {
         return mapper.toDTO(repository.save(mapper.toEntity(dto)));
     }
     
-	/*
-	 * @Override
-	 * 
-	 * @Transactional(propagation = Propagation.REQUIRED) public PaymentDTO
-	 * save(PaymentDTO dto) { return
-	 * mapper.toDTO(repository.save(mapper.toEntity(dto))); }
-	 */
+    @Async
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public CompletableFuture<PaymentDTO> saveAsynch(PaymentDTO dto) {
+        PaymentDTO saved = mapper.toDTO(repository.save(mapper.toEntity(dto)));
+        return CompletableFuture.completedFuture(saved);
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

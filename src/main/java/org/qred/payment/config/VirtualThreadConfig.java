@@ -17,11 +17,11 @@ public class VirtualThreadConfig {
     @Value("${use.virtual.threads:false}")
     private boolean useVirtualThreads;
 
-    @Bean
+    @Bean(name = "taskExecutor") // this is the key name Spring looks for
     public Executor taskExecutor() {
         return useVirtualThreads
                 ? Executors.newVirtualThreadPerTaskExecutor()
-                : Executors.newCachedThreadPool(); // fallback or standard thread pool
+                : Executors.newCachedThreadPool();
     }
 
     @Bean

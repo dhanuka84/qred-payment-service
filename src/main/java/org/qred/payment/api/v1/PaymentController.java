@@ -69,8 +69,9 @@ public class PaymentController {
                 validator.validatePaymentRequest(dto);
                 payments.add(dto);
             }
-
-            payments.forEach(paymentService::save);
+            
+            payments.forEach(paymentService::saveAsynch);
+            //payments.forEach(paymentService::save);
             return ResponseEntity.ok("Successfully processed " + payments.size() + " payments.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

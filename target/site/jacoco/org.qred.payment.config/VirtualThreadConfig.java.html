@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Configuration;
     @Value(&quot;${use.virtual.threads:false}&quot;)
     private boolean useVirtualThreads;
 
-    @Bean
+    @Bean(name = &quot;taskExecutor&quot;) // this is the key name Spring looks for
     public Executor taskExecutor() {
 <span class="nc bnc" id="L22" title="All 2 branches missed.">        return useVirtualThreads</span>
 <span class="nc" id="L23">                ? Executors.newVirtualThreadPerTaskExecutor()</span>
-<span class="nc" id="L24">                : Executors.newCachedThreadPool(); // fallback or standard thread pool</span>
+<span class="nc" id="L24">                : Executors.newCachedThreadPool();</span>
     }
 
     @Bean

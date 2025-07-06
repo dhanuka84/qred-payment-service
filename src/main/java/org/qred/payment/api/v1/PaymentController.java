@@ -6,10 +6,17 @@ import java.util.List;
 
 import org.qred.payment.domain.PaymentDTO;
 import org.qred.payment.service.PaymentService;
-import org.qred.payment.validator.RestValidator;
+import org.qred.payment.validator.PaymentValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -24,9 +31,9 @@ import jakarta.validation.Valid;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final RestValidator validator;
+    private final PaymentValidator validator;
 
-    public PaymentController(PaymentService paymentService, RestValidator validator) {
+    public PaymentController(PaymentService paymentService, PaymentValidator validator) {
         this.paymentService = paymentService;
         this.validator = validator;
     }

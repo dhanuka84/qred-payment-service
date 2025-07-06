@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.qred.payment.domain.PaymentDTO;
 import org.qred.payment.service.PaymentService;
-import org.qred.payment.validator.RestValidator;
+import org.qred.payment.validator.PaymentValidator;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +29,7 @@ public class PaymentControllerTest {
     private PaymentService paymentService;
 
     @Mock
-    private RestValidator validator;
+    private PaymentValidator validator;
 
     @InjectMocks
     private PaymentController paymentController;

@@ -4,10 +4,16 @@ import java.util.List;
 
 import org.qred.payment.domain.ClientDTO;
 import org.qred.payment.service.ClientService;
-import org.qred.payment.validator.RestValidator;
+import org.qred.payment.validator.ClientValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,9 +28,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class ClientController {
 
     private final ClientService clientService;
-    private final RestValidator validator;
+    private final ClientValidator validator;
 
-    public ClientController(ClientService clientService, RestValidator validator) {
+    public ClientController(ClientService clientService, ClientValidator validator) {
         this.clientService = clientService;
         this.validator = validator;
     }

@@ -10,10 +10,16 @@ import java.util.List;
 
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.service.ContractService;
-import org.qred.payment.validator.RestValidator;
+import org.qred.payment.validator.CotractValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,9 +30,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class ContractController {
 
     private final ContractService contractService;
-    private final RestValidator validator;
+    private final CotractValidator validator;
 
-    public ContractController(ContractService contractService, RestValidator validator) {
+    public ContractController(ContractService contractService, CotractValidator validator) {
         this.contractService = contractService;
         this.validator = validator;
     }

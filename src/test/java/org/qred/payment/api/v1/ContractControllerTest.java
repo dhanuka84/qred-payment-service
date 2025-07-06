@@ -1,8 +1,11 @@
 package org.qred.payment.api.v1;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
@@ -14,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.qred.payment.domain.ContractDTO;
 import org.qred.payment.service.ContractService;
-import org.qred.payment.validator.RestValidator;
+import org.qred.payment.validator.CotractValidator;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,7 +31,7 @@ public class ContractControllerTest {
     private ContractService contractService;
 
     @Mock
-    private RestValidator validator;
+    private CotractValidator validator;
 
     @InjectMocks
     private ContractController contractController;

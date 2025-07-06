@@ -3,6 +3,7 @@ package org.qred.payment.service.impl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -70,5 +71,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         return mapper.toDTO(repository.save(payment));
     }
+
+	@Override
+	public List<PaymentDTO> findPaymentsByContractNumber(String contractNumber) {
+	    List<Payment> payments = repository.findPaymentsByContractNumber(contractNumber);
+	    return payments.stream()
+	        .map(mapper::toDTO)
+	        .collect(Collectors.toList());
+	}
+
 
 }

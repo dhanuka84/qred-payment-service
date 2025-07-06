@@ -88,6 +88,18 @@ public class PaymentController {
         List<PaymentDTO> payments = paymentService.findAll();
         return ResponseEntity.ok(payments);
     }
+    
+    @Operation(summary = "Get payments by contract.", description = "Fetch payment records for contract.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful retrieval."),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/contracts/{contractNumber}/payments")
+    public ResponseEntity<List<PaymentDTO>> findPaymentsByContractNumber(@PathVariable String contractNumber) {
+    	validator.validateContractNumber(contractNumber);
+        List<PaymentDTO> payments = paymentService.findPaymentsByContractNumber(contractNumber);
+        return ResponseEntity.ok(payments);
+    }
 
     @Operation(summary = "Get a payment by ID.", description = "Fetch a single payment by ID.")
     @ApiResponses(value = {

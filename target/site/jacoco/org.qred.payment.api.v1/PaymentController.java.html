@@ -88,6 +88,18 @@ public class PaymentController {
 <span class="fc" id="L88">        List&lt;PaymentDTO&gt; payments = paymentService.findAll();</span>
 <span class="fc" id="L89">        return ResponseEntity.ok(payments);</span>
     }
+    
+    @Operation(summary = &quot;Get payments by contract.&quot;, description = &quot;Fetch payment records for contract.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successful retrieval.&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)
+    })
+    @GetMapping(&quot;/contracts/{contractNumber}/payments&quot;)
+    public ResponseEntity&lt;List&lt;PaymentDTO&gt;&gt; findPaymentsByContractNumber(@PathVariable String contractNumber) {
+<span class="nc" id="L99">    	validator.validateContractNumber(contractNumber);</span>
+<span class="nc" id="L100">        List&lt;PaymentDTO&gt; payments = paymentService.findPaymentsByContractNumber(contractNumber);</span>
+<span class="nc" id="L101">        return ResponseEntity.ok(payments);</span>
+    }
 
     @Operation(summary = &quot;Get a payment by ID.&quot;, description = &quot;Fetch a single payment by ID.&quot;)
     @ApiResponses(value = {
@@ -97,8 +109,8 @@ public class PaymentController {
     })
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;PaymentDTO&gt; getPaymentById(@PathVariable Long id) {
-<span class="fc" id="L100">        PaymentDTO payment = paymentService.findById(id);</span>
-<span class="fc" id="L101">        return ResponseEntity.ok(payment);</span>
+<span class="fc" id="L112">        PaymentDTO payment = paymentService.findById(id);</span>
+<span class="fc" id="L113">        return ResponseEntity.ok(payment);</span>
     }
 
     @Operation(summary = &quot;Create payment entity.&quot;, description = &quot;Create a new payment.&quot;)
@@ -109,8 +121,8 @@ public class PaymentController {
     })
     @PostMapping
     public ResponseEntity&lt;PaymentDTO&gt; createPayment(@Valid @RequestBody PaymentDTO payment) {
-<span class="fc" id="L112">        PaymentDTO created = paymentService.save(payment);</span>
-<span class="fc" id="L113">        return ResponseEntity.status(HttpStatus.CREATED).body(created);</span>
+<span class="fc" id="L124">        PaymentDTO created = paymentService.save(payment);</span>
+<span class="fc" id="L125">        return ResponseEntity.status(HttpStatus.CREATED).body(created);</span>
     }
 
     @Operation(summary = &quot;Update a payment.&quot;, description = &quot;Update an existing payment.&quot;)
@@ -122,8 +134,8 @@ public class PaymentController {
     })
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;PaymentDTO&gt; updatePayment(@PathVariable Long id, @Valid @RequestBody PaymentDTO payment) {
-<span class="fc" id="L125">        PaymentDTO updated = paymentService.update(id, payment);</span>
-<span class="fc" id="L126">        return ResponseEntity.ok(updated);</span>
+<span class="fc" id="L137">        PaymentDTO updated = paymentService.update(id, payment);</span>
+<span class="fc" id="L138">        return ResponseEntity.ok(updated);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

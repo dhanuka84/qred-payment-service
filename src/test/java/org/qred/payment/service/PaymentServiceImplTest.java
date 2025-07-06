@@ -67,6 +67,14 @@ public class PaymentServiceImplTest {
         assertEquals(1, result.size());
         assertEquals("12345", result.get(0).contract_number());
     }
+    
+    @Test
+    void shouldReturnPaymentsForTheContract() {
+        when(paymentRepository.findPaymentsByContractNumber("12345")).thenReturn(List.of(payment));
+        List<PaymentDTO> result = paymentService.findPaymentsByContractNumber("12345");
+        assertEquals(1, result.size());
+        assertEquals("12345", result.get(0).contract_number());
+    }
 
     @Test
     void shouldReturnPaymentById() {

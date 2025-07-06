@@ -20,6 +20,14 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
 	Optional<Contract> findByContractNumber(String contractNumber);
 
-	@Query(value = "SELECT * FROM contract WHERE contract_number IN (:contractNumbers)", nativeQuery = true)
+	@Query(value = """
+			SELECT c.*,
+			       cl.client_id as cl_client_id,
+			       cl.client_name as cl_client_name
+			FROM contract c
+			JOIN client cl ON c.client_id = cl.client_id
+			WHERE c.contract_number IN (:contractNumbers)
+			""", nativeQuery = true)
 	List<Contract> findAllByContractNumberIn(@Param("contractNumbers") Set<String> contractNumbers);
+
 }

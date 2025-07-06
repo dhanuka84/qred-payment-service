@@ -16,7 +16,7 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contractId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 

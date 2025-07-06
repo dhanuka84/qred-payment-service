@@ -44,7 +44,7 @@ public class CustomExceptionHandler
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException( MethodArgumentNotValidException ex )
     {
-        log.error( "Field validation error occurred while processing game request", ex );
+        log.error( "Field validation error occurred while processing request", ex );
         ErrorResponse errorResponse = new ErrorResponse( "Bad Request", "Validation failed for one or more fields.", HttpStatus.BAD_REQUEST );
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             errorResponse.getErrors().add( MessageFormat.format( "{0} : {1}",((FieldError) error).getField(), error.getDefaultMessage()  ));
@@ -58,14 +58,14 @@ public class CustomExceptionHandler
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ErrorResponse> handleConcurrentModificationException( Exception ex )
     {
-        log.error( "Concurrency error occurred while processing game request", ex );
+        log.error( "Concurrency error occurred while processing request", ex );
         return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new ErrorResponse( "Bad Request", "Object Already Modified by a different user.", HttpStatus.BAD_REQUEST ) );
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException( Exception ex )
     {
-        log.error( "An error occurred while processing game request", ex );
+        log.error( "An error occurred while processing request", ex );
         return ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( new ErrorResponse( "Internal Server Error", "Error wile processing the Request.", HttpStatus.INTERNAL_SERVER_ERROR ) );
     }
     

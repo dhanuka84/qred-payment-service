@@ -15,6 +15,11 @@ import java.time.LocalDate;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
+    @Version
+    @Column(nullable = false)
+    private Integer version;
+    
     private Long paymentId;
 
     private LocalDate paymentDate;
@@ -25,24 +30,24 @@ public class Payment {
     @JoinColumn(name = &quot;contract_id&quot;)
     private Contract contract;
 
-<span class="fc" id="L28">    public Payment() {}</span>
-<span class="fc" id="L29">    public Payment(Long paymentId, LocalDate paymentDate, double amount, String type, Contract contract) {</span>
-<span class="fc" id="L30">        this.paymentId = paymentId;</span>
-<span class="fc" id="L31">        this.paymentDate = paymentDate;</span>
-<span class="fc" id="L32">        this.amount = amount;</span>
-<span class="fc" id="L33">        this.type = type;</span>
-<span class="fc" id="L34">        this.contract = contract;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L33">    public Payment() {}</span>
+<span class="fc" id="L34">    public Payment(Long paymentId, LocalDate paymentDate, double amount, String type, Contract contract) {</span>
+<span class="fc" id="L35">        this.paymentId = paymentId;</span>
+<span class="fc" id="L36">        this.paymentDate = paymentDate;</span>
+<span class="fc" id="L37">        this.amount = amount;</span>
+<span class="fc" id="L38">        this.type = type;</span>
+<span class="fc" id="L39">        this.contract = contract;</span>
+<span class="fc" id="L40">    }</span>
 
-<span class="nc" id="L37">    public Long getPaymentId() { return paymentId; }</span>
-<span class="nc" id="L38">    public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }</span>
-<span class="fc" id="L39">    public LocalDate getPaymentDate() { return paymentDate; }</span>
-<span class="fc" id="L40">    public void setPaymentDate(LocalDate paymentDate) { this.paymentDate = paymentDate; }</span>
-<span class="fc" id="L41">    public double getAmount() { return amount; }</span>
-<span class="fc" id="L42">    public void setAmount(double amount) { this.amount = amount; }</span>
-<span class="fc" id="L43">    public String getType() { return type; }</span>
-<span class="fc" id="L44">    public void setType(String type) { this.type = type; }</span>
-<span class="fc" id="L45">    public Contract getContract() { return contract; }</span>
-<span class="fc" id="L46">    public void setContract(Contract contract) { this.contract = contract; }</span>
+<span class="nc" id="L42">    public Long getPaymentId() { return paymentId; }</span>
+<span class="nc" id="L43">    public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }</span>
+<span class="fc" id="L44">    public LocalDate getPaymentDate() { return paymentDate; }</span>
+<span class="fc" id="L45">    public void setPaymentDate(LocalDate paymentDate) { this.paymentDate = paymentDate; }</span>
+<span class="fc" id="L46">    public double getAmount() { return amount; }</span>
+<span class="fc" id="L47">    public void setAmount(double amount) { this.amount = amount; }</span>
+<span class="fc" id="L48">    public String getType() { return type; }</span>
+<span class="fc" id="L49">    public void setType(String type) { this.type = type; }</span>
+<span class="fc" id="L50">    public Contract getContract() { return contract; }</span>
+<span class="fc" id="L51">    public void setContract(Contract contract) { this.contract = contract; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

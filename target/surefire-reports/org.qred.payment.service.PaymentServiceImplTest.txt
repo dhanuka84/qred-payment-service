@@ -1,11 +1,13 @@
 -------------------------------------------------------------------------------
 Test set: org.qred.payment.service.PaymentServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.116 s <<< FAILURE! -- in org.qred.payment.service.PaymentServiceImplTest
-org.qred.payment.service.PaymentServiceImplTest.shouldUpdatePayment -- Time elapsed: 0.006 s <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "org.qred.payment.service.ContractService.findByContractNumber(String)" because "this.contractService" is null
-	at org.qred.payment.service.impl.PaymentServiceImpl.update(PaymentServiceImpl.java:63)
-	at org.qred.payment.service.PaymentServiceImplTest.shouldUpdatePayment(PaymentServiceImplTest.java:83)
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.195 s <<< FAILURE! -- in org.qred.payment.service.PaymentServiceImplTest
+org.qred.payment.service.PaymentServiceImplTest.shouldUpdatePayment -- Time elapsed: 0.011 s <<< ERROR!
+java.lang.IllegalArgumentException: Contract not found: 12345
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.qred.payment.service.impl.PaymentServiceImpl.update(PaymentServiceImpl.java:64)
+	at org.qred.payment.service.impl.PaymentServiceImpl.update(PaymentServiceImpl.java:54)
+	at org.qred.payment.service.PaymentServiceImplTest.shouldUpdatePayment(PaymentServiceImplTest.java:90)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)

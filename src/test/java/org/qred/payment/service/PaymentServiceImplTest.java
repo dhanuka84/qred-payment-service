@@ -2,6 +2,7 @@ package org.qred.payment.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ import org.qred.payment.entity.Payment;
 import org.qred.payment.mapper.PaymentMapper;
 import org.qred.payment.repository.ContractRepository;
 import org.qred.payment.repository.PaymentRepository;
+import org.qred.payment.service.impl.ContractServiceImpl;
 import org.qred.payment.service.impl.PaymentServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,6 +38,9 @@ public class PaymentServiceImplTest {
 
     @Spy
     private PaymentMapper paymentMapper = Mappers.getMapper(PaymentMapper.class);
+    
+    @Mock
+    private ContractServiceImpl contractService;
 
     @InjectMocks
     private PaymentServiceImpl paymentService;
@@ -47,6 +52,8 @@ public class PaymentServiceImplTest {
     @BeforeEach
     void setUp() {
     	paymentMapper.setContractRepository(contractRepository);
+    	
+    	paymentService = spy( new PaymentServiceImpl( paymentRepository, contractService, paymentMapper ) );
     	
         contract = new Contract(1L, new Client(1L, "Acme"), "12345");
         payment = new Payment(1L, LocalDate.of(2024, 1, 30), 1000.0, "incoming", contract);

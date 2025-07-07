@@ -17,5 +17,8 @@ http://localhost:8080/swagger-ui/index.html#/
 $ mvn spring-boot:run
 $ mvn clean install
 
+#JCoCo test coverage report
+target/site/jacoco/index.html
+
 #Spring Boot Health
 http://localhost:8080/actuator/health

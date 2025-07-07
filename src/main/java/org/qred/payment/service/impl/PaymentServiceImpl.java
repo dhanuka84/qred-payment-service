@@ -67,7 +67,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public CompletableFuture<List<PaymentDTO>> saveAsynch(List<PaymentDTO> payments, PaymentValidator validator) {
         
-        // ✅ Validate and collect only valid DTOs
+        // Validate and collect only valid DTOs
         List<PaymentDTO> validPayments = payments.stream()
             .filter(dto -> {
                 try {

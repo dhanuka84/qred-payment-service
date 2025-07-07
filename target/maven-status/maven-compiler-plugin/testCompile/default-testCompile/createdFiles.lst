@@ -1,6 +1,0 @@
-org/qred/payment/api/v1/PaymentControllerTest.class
-org/qred/payment/service/ClientServiceImplTest.class
-org/qred/payment/service/ContractServiceImplTest.class
-org/qred/payment/api/v1/ContractControllerTest.class
-org/qred/payment/api/v1/ClientControllerTest.class
-org/qred/payment/service/PaymentServiceImplTest.class

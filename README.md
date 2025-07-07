@@ -13,6 +13,10 @@ Swagger-UI.html
 #swagger-ui
 http://localhost:8080/swagger-ui/index.html#/
 
+#OpenAPI APIs doc
+http://localhost:8080/api-docs.yaml
+api-docs.yaml
+
 #Spring Boot Operations
 $ mvn spring-boot:run
 $ mvn clean install

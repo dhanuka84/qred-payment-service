@@ -68,17 +68,8 @@ public class PaymentServiceImpl implements PaymentService {
     public CompletableFuture<List<PaymentDTO>> saveAsynch(List<PaymentDTO> payments, PaymentValidator validator) {
         
         // Validate and collect only valid DTOs
-        List<PaymentDTO> validPayments = payments.stream()
-            .filter(dto -> {
-                try {
-                    validator.validatePaymentRequest(dto);
-                    return true;
-                } catch (Exception e) {
-                    log.warn("Validation failed for PaymentDTO: {}", dto, e);
-                    return false;
-                }
-            })
-            .toList();
+		List<PaymentDTO> validPayments = validatePaymentsInBatch(payments, validator);
+        
 
         if (validPayments.isEmpty()) {
             log.warn("No valid PaymentDTOs to process.");
@@ -107,6 +98,21 @@ public class PaymentServiceImpl implements PaymentService {
 
         return savePayments(paymentEntities);
     }
+	
+	private List<PaymentDTO> validatePaymentsInBatch(List<PaymentDTO> payments, PaymentValidator validator) {
+		List<PaymentDTO> validPayments = payments.stream()
+	            .filter(dto -> {
+	                try {
+	                    validator.validatePaymentRequest(dto);
+	                    return true;
+	                } catch (Exception e) {
+	                    log.warn("Validation failed for PaymentDTO: {}", dto, e);
+	                    return false;
+	                }
+	            })
+	            .toList();
+		return validPayments;
+	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
 	private CompletableFuture<List<PaymentDTO>> savePayments(List<Payment> paymentEntities){

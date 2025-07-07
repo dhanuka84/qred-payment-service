@@ -81,11 +81,18 @@ public class PaymentServiceImpl implements PaymentService {
 
         Set<String> contractNumbers = paymentsByContracts.keySet();
 
+        //get contract entities
         List<Contract> contracts = contractService.findAllByContractNumbers(contractNumbers);
         Map<String, Contract> contractsByContractNumber = contracts.stream()
                 .collect(Collectors.toMap(Contract::getContractNumber, Function.identity()));
 
-        List<Payment> paymentEntities = validPayments.stream()
+        //filter out valid entities and populate payment entity with contract
+        List<Payment> paymentEntities = filterOutValidEntities(validPayments, contractsByContractNumber);
+        return savePayments(paymentEntities);
+    }
+	
+	private List<Payment> filterOutValidEntities(List<PaymentDTO> validPayments,Map<String, Contract> contractsByContractNumber){
+		List<Payment> paymentEntities = validPayments.stream()
                 .map(dto -> {
                     Contract contract = contractsByContractNumber.get(dto.contract_number());
                     if (contract == null) {
@@ -95,9 +102,8 @@ public class PaymentServiceImpl implements PaymentService {
                     return mapper.toEntity(dto, contract);
                 })
                 .collect(Collectors.toList());
-
-        return savePayments(paymentEntities);
-    }
+		return paymentEntities;
+	}
 	
 	private List<PaymentDTO> validatePaymentsInBatch(List<PaymentDTO> payments, PaymentValidator validator) {
 		List<PaymentDTO> validPayments = payments.stream()

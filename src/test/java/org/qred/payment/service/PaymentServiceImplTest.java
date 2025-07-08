@@ -65,7 +65,7 @@ public class PaymentServiceImplTest {
         when(paymentRepository.findAll()).thenReturn(List.of(payment));
         List<PaymentDTO> result = paymentService.findAll();
         assertEquals(1, result.size());
-        assertEquals("12345", result.get(0).contract_number());
+        assertEquals("12345", result.get(0).getContractNumber());
     }
     
     @Test
@@ -73,14 +73,14 @@ public class PaymentServiceImplTest {
         when(paymentRepository.findPaymentsByContractNumber("12345")).thenReturn(List.of(payment));
         List<PaymentDTO> result = paymentService.findPaymentsByContractNumber("12345");
         assertEquals(1, result.size());
-        assertEquals("12345", result.get(0).contract_number());
+        assertEquals("12345", result.get(0).getContractNumber());
     }
 
     @Test
     void shouldReturnPaymentById() {
         when(paymentRepository.findById(1L)).thenReturn(Optional.of(payment));
         PaymentDTO result = paymentService.findById(1L);
-        assertEquals("12345", result.contract_number());
+        assertEquals("12345", result.getContractNumber());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class PaymentServiceImplTest {
         when(contractRepository.findByContractNumber("12345")).thenReturn(Optional.of(contract));
         when(paymentRepository.save(any())).thenReturn(payment);
         PaymentDTO result = paymentService.save(paymentDTO);
-        assertEquals("12345", result.contract_number());
+        assertEquals("12345", result.getContractNumber());
     }
 
     @Test
@@ -97,6 +97,6 @@ public class PaymentServiceImplTest {
         when(contractService.findByContractNumber("12345")).thenReturn(Optional.of(contract));
         when(paymentRepository.save(any())).thenReturn(payment);
         PaymentDTO result = paymentService.update(1L, paymentDTO);
-        assertEquals("12345", result.contract_number());
+        assertEquals("12345", result.getContractNumber());
     }
 } 

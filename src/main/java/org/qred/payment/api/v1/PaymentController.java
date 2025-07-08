@@ -142,6 +142,7 @@ public class PaymentController {
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO payment) {
+		validator.validatePaymentRequest(payment);
 		PaymentDTO created = paymentService.save(payment);
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
 	}
@@ -153,6 +154,7 @@ public class PaymentController {
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@PutMapping(path="/{id}",consumes = "application/json", produces = "application/json")
 	public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @Valid @RequestBody PaymentDTO payment) {
+		validator.validatePaymentRequest(payment);
 		PaymentDTO updated = paymentService.update(id, payment);
 		return ResponseEntity.ok(updated);
 	}

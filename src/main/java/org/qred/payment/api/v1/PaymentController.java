@@ -123,24 +123,24 @@ public class PaymentController {
 	public ResponseEntity<List<PaymentDTO>> findPaymentsByContractNumber(@PathVariable String contractNumber) {
 		validator.validateContractNumber(contractNumber);
 		List<PaymentDTO> payments = paymentService.findPaymentsByContractNumber(contractNumber);
-		return ResponseEntity.ok(payments);
+		return ResponseEntity.status(HttpStatus.OK).body(payments);
 	}
 
 	@Operation(summary = "Get a payment by ID.", description = "Fetch a single payment by ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successful retrieval."),
 			@ApiResponse(responseCode = "404", description = "Payment not found"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/{id}")
+	@GetMapping(path="/{id}",produces = "application/json")
 	public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Long id) {
 		PaymentDTO payment = paymentService.findById(id);
-		return ResponseEntity.ok(payment);
+		return ResponseEntity.status(HttpStatus.OK).body(payment);
 	}
 
 	@Operation(summary = "Create payment entity.", description = "Create a new payment.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Successfully created."),
 			@ApiResponse(responseCode = "400", description = "Bad Request."),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@PostMapping
+	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO payment) {
 		PaymentDTO created = paymentService.save(payment);
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -151,7 +151,7 @@ public class PaymentController {
 			@ApiResponse(responseCode = "400", description = "Bad Request."),
 			@ApiResponse(responseCode = "404", description = "Payment not found"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@PutMapping("/{id}")
+	@PutMapping(path="/{id}",consumes = "application/json", produces = "application/json")
 	public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @Valid @RequestBody PaymentDTO payment) {
 		PaymentDTO updated = paymentService.update(id, payment);
 		return ResponseEntity.ok(updated);

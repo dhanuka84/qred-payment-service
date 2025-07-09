@@ -1,8 +1,14 @@
 package org.qred.payment.api.v1;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
@@ -13,12 +19,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.qred.payment.domain.PaymentDTO;
+import org.qred.payment.service.PaymentFileUploadService;
 import org.qred.payment.service.PaymentService;
 import org.qred.payment.validator.PaymentValidator;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentControllerTest {
@@ -30,6 +38,9 @@ public class PaymentControllerTest {
 
     @Mock
     private PaymentValidator validator;
+    
+    @Mock
+    private PaymentFileUploadService uploadService;
 
     @InjectMocks
     private PaymentController paymentController;
@@ -124,11 +135,19 @@ public class PaymentControllerTest {
                 "file", "payments.csv", "text/csv", csvContent.getBytes()
         );
 
+        List<PaymentDTO> mockPayments = List.of(
+                new PaymentDTO("2024-01-10", 1000.00, "incoming", "C001"),
+                new PaymentDTO("2024-01-11", 500.00, "outgoing", "C002")
+        );
+
+        when(uploadService.processFile(any(MultipartFile.class))).thenReturn(mockPayments);
+
         mockMvc.perform(multipart("/api/v1/payments/upload").file(file))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(2))
                 .andExpect(jsonPath("$.message").value("Successfully processed payments"));
     }
+
 
     @Test
     void shouldReturnBadRequestForEmptyUpload() throws Exception {

@@ -1,14 +1,10 @@
 package org.qred.payment.api.v1;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.qred.payment.domain.PaymentDTO;
-import org.qred.payment.domain.PaymentDTOListWrapper;
+import org.qred.payment.service.PaymentFileUploadService;
 import org.qred.payment.service.PaymentService;
 import org.qred.payment.validator.PaymentValidator;
 import org.springframework.http.HttpStatus;
@@ -23,15 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -39,34 +30,26 @@ public class PaymentController {
 
 	private final PaymentService paymentService;
 	private final PaymentValidator validator;
+	private final PaymentFileUploadService uploadService;
 
-	public PaymentController(PaymentService paymentService, PaymentValidator validator) {
+	public PaymentController(PaymentService paymentService, PaymentFileUploadService uploadService, PaymentValidator validator) {
 		this.paymentService = paymentService;
 		this.validator = validator;
+		this.uploadService = uploadService;
 	}
 
-	@Operation(summary = "Upload payments via CSV", description = "Upload and process a CSV file to create payment entries.")
+	@Operation(summary = "Upload payments via CSV", description = "Upload and process a file to create payment entries.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "File processed successfully."),
-			@ApiResponse(responseCode = "400", description = "Invalid CSV format."),
+			@ApiResponse(responseCode = "400", description = "Invalid  format."),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@PostMapping(value = "/upload", consumes = { "multipart/form-data" })
-	public ResponseEntity<?> uploadCsvFile(@RequestParam("file") MultipartFile file) {
+	@PostMapping(value = "/upload", consumes = { "multipart/form-data" },produces = "application/json")
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty()) {
 			return ResponseEntity.badRequest().body(Map.of("error", "Empty file."));
 		}
-		String filename = file.getOriginalFilename();
-		List<PaymentDTO> payments = new ArrayList<>();
 
 		try {
-			if (filename != null && filename.endsWith(".csv")) {
-				payments = parseCsv(file.getInputStream());
-			} else if (filename != null && filename.endsWith(".xml")) {
-				payments = parseXml(file.getInputStream());
-			} else {
-				return ResponseEntity.badRequest()
-						.body(Map.of("error", "Unsupported file format. Only CSV and XML are allowed."));
-			}
-
+			List<PaymentDTO> payments = uploadService.processFile(file);
 			paymentService.saveAsynch(payments, validator);
 			return ResponseEntity.ok(Map.of("message", "Successfully processed payments", "count", payments.size()));
 
@@ -75,37 +58,6 @@ public class PaymentController {
 					.body(Map.of("error", "Error processing file: " + e.getMessage()));
 		}
 	}
-
-	private List<PaymentDTO> parseCsv(InputStream is) throws IOException, CsvValidationException {
-		List<PaymentDTO> payments = new ArrayList<>();
-		try (CSVReader reader = new CSVReader(new InputStreamReader(is))) {
-			String[] header = reader.readNext(); // skip header
-			String[] row;
-
-			while ((row = reader.readNext()) != null) {
-				if (row.length < 4)
-					continue;
-
-				PaymentDTO dto = new PaymentDTO(
-                        row[0].trim(),
-                        Double.parseDouble(row[1].trim()),
-                        row[2].trim(),
-                        row[3].trim()
-                );
-				payments.add(dto);
-			}
-		}
-		return payments;
-	}
-
-	
-	private List<PaymentDTO> parseXml(InputStream is) throws Exception {
-	    JAXBContext context = JAXBContext.newInstance(PaymentDTOListWrapper.class);
-	    Unmarshaller unmarshaller = context.createUnmarshaller();
-	    PaymentDTOListWrapper wrapper = (PaymentDTOListWrapper) unmarshaller.unmarshal(is);
-	    return wrapper.getPayments();
-	}
-	 
 
 	@Operation(summary = "Get all payments.", description = "Fetch all payment records.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successful retrieval."),

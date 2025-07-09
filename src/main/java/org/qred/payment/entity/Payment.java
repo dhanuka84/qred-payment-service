@@ -1,14 +1,23 @@
 
 package org.qred.payment.entity;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 /**
  *
  * @author : Dhanuka Ranasinghe
  * @since : Date: 05/07/2025
  */
-
-import jakarta.persistence.*;
-import java.time.LocalDate;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "payment")
@@ -37,8 +46,31 @@ public class Payment {
         this.type = type;
         this.contract = contract;
     }
+    
+    
 
-    public Long getPaymentId() { return paymentId; }
+    
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(amount, contract, paymentDate, paymentId, type);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Payment other = (Payment) obj;
+		return Double.doubleToLongBits(amount) == Double.doubleToLongBits(other.amount)
+				&& Objects.equals(contract, other.contract) && Objects.equals(paymentDate, other.paymentDate)
+				&& Objects.equals(paymentId, other.paymentId) && Objects.equals(type, other.type);
+	}
+	
+	public Long getPaymentId() { return paymentId; }
     public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }
     public LocalDate getPaymentDate() { return paymentDate; }
     public void setPaymentDate(LocalDate paymentDate) { this.paymentDate = paymentDate; }

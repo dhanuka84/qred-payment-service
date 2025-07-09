@@ -62,6 +62,7 @@ public class ContractServiceImpl implements ContractService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<Contract> findAllByContractNumbers(Set<String> contractNumbers) {
 		return repository.findAllByContractNumberIn(contractNumbers);
 	}

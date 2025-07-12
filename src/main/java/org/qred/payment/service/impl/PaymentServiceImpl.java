@@ -122,7 +122,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	private CompletableFuture<List<PaymentDTO>> savePayments(List<Payment> paymentEntities){
+	public CompletableFuture<List<PaymentDTO>> savePayments(List<Payment> paymentEntities){
 		// Save all Payment entities
 	    List<Payment> savedPayments = repository.saveAll(paymentEntities);
 

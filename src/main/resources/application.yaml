@@ -25,10 +25,11 @@ management:
 
 logging:
   level:
-    org:
-      comeon: DEBUG
-      hibernate: DEBUG
-      hibernate.type.descriptor.sql: TRACE
+    org.hibernate.SQL: DEBUG                # Logs SQL statements
+    org.hibernate.type.descriptor.sql: TRACE # Logs SQL bind parameter values
+    org.hibernate.transaction: DEBUG         # Logs transaction lifecycle (begin, commit, rollback)
+    org.springframework.orm.jpa: DEBUG       # Spring's JPA integration logging
+
 
 use:
   virtual:

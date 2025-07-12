@@ -77,7 +77,8 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         Map<String, List<PaymentDTO>> paymentsByContracts = validPayments.stream()
-                .collect(Collectors.groupingBy(PaymentDTO::contract_number));
+        	    .collect(Collectors.groupingBy(PaymentDTO::getContractNumber));
+        		
 
         Set<String> contractNumbers = paymentsByContracts.keySet();
 
@@ -94,10 +95,10 @@ public class PaymentServiceImpl implements PaymentService {
 	private List<Payment> filterOutValidEntities(List<PaymentDTO> validPayments,Map<String, Contract> contractsByContractNumber){
 		List<Payment> paymentEntities = validPayments.stream()
                 .map(dto -> {
-                    Contract contract = contractsByContractNumber.get(dto.contract_number());
+                    Contract contract = contractsByContractNumber.get(dto.getContractNumber());
                     if (contract == null) {
-                        log.error("Contract not found for number: {}", dto.contract_number());
-                        throw new IllegalArgumentException("Contract not found for number: " + dto.contract_number());
+                        log.error("Contract not found for number: {}", dto.getContractNumber());
+                        throw new IllegalArgumentException("Contract not found for number: " + dto.getContractNumber());
                     }
                     return mapper.toEntity(dto, contract);
                 })
@@ -120,7 +121,7 @@ public class PaymentServiceImpl implements PaymentService {
 		return validPayments;
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	private CompletableFuture<List<PaymentDTO>> savePayments(List<Payment> paymentEntities){
 		// Save all Payment entities
 	    List<Payment> savedPayments = repository.saveAll(paymentEntities);
@@ -141,14 +142,14 @@ public class PaymentServiceImpl implements PaymentService {
 		Payment payment = repository.findById(id).orElseThrow();
 
 		// Parse date from String
-		LocalDate paymentDate = LocalDate.parse(dto.paymentDate(), DATE_FORMATTER);
+		LocalDate paymentDate = LocalDate.parse(dto.getPaymentDate(), DATE_FORMATTER);
 		payment.setPaymentDate(paymentDate);
-		payment.setAmount(dto.amount());
-		payment.setType(dto.type());
+		payment.setAmount(dto.getAmount());
+		payment.setType(dto.getType());
 
 		// Update contract
-		Contract contract = contractService.findByContractNumber(dto.contract_number())
-				.orElseThrow(() -> new IllegalArgumentException("Contract not found: " + dto.contract_number()));
+		Contract contract = contractService.findByContractNumber(dto.getContractNumber())
+				.orElseThrow(() -> new IllegalArgumentException("Contract not found: " + dto.getContractNumber()));
 		payment.setContract(contract);
 
 		return mapper.toDTO(repository.save(payment));

@@ -1,20 +1,20 @@
 package org.qred.payment.mapper;
 
-/**
- *
- * @author : Dhanuka Ranasinghe
- * @since : Date: 05/07/2025
- */
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import org.mapstruct.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Context;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 import org.qred.payment.domain.PaymentDTO;
 import org.qred.payment.entity.Contract;
 import org.qred.payment.entity.Payment;
 import org.qred.payment.repository.ContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class PaymentMapper {
@@ -24,15 +24,15 @@ public abstract class PaymentMapper {
     @Autowired
     protected ContractRepository contractRepository;
 
-    @Mapping(source = "contract.contractNumber", target = "contract_number")
+    @Mapping(source = "contract.contractNumber", target = "contractNumber")
     @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "localDateToString")
     public abstract PaymentDTO toDTO(Payment payment);
 
     @Mapping(target = "paymentId", ignore = true)
-    @Mapping(source = "contract_number", target = "contract", qualifiedByName = "contractFromNumber")
+    @Mapping(source = "contractNumber", target = "contract", qualifiedByName = "contractFromNumber")
     @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "stringToLocalDate")
     public abstract Payment toEntity(PaymentDTO dto);
-    
+
     @Mapping(target = "paymentId", ignore = true)
     @Mapping(source = "paymentDate", target = "paymentDate", qualifiedByName = "stringToLocalDate")
     public abstract Payment toEntity(PaymentDTO dto, @Context Contract contract);
@@ -57,8 +57,9 @@ public abstract class PaymentMapper {
         return contractRepository.findByContractNumber(contractNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found: " + contractNumber));
     }
-    
+
+    // Optional setter for tests or manual instantiation
     public void setContractRepository(ContractRepository contractRepository) {
-    	this.contractRepository = contractRepository;
+        this.contractRepository = contractRepository;
     }
 }
